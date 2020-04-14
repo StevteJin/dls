@@ -1,0 +1,16 @@
+.loginbox{
+    width:300px;
+    position: absolute;
+    left:50%;
+    transform: translate(-50%,20%);
+    top:200px;
+}
+
+.loginbox .title{
+    font-size:30px;
+    text-align: center;
+    margin-bottom:30px;
+}
+.loginbox .loginButton{
+    width:300px;
+}

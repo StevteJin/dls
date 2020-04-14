@@ -1,0 +1,67 @@
+.topTitle {
+    width: 100%;
+    height: 75px;
+    background: '#fff!important';
+    border-bottom: '1px solid #ccc'
+}
+
+.topTitle .s1 {
+    display: inline-block;
+    height: 28px;
+    border-left: 10px solid #5473FF;
+    color: #5A5B65;
+    font-size: 27px;
+    line-height: 28px;
+    margin-top: 24px;
+    margin-left: 59px;
+    padding-left: 20px;
+}
+
+.topTitle .s2 {
+    display: inline-block;
+    font-size: 14px;
+    margin-left: 608px;
+}
+
+.topTitle .s2 img {
+    width: 14px;
+    margin-left: 10px;
+    margin-top: -4px;
+}
+
+.topTitle .s2 .us {
+    color: #5473FF;
+    margin-left: 13px;
+}
+
+.username {
+    color: #5473FF;
+    font-size: 20px;
+    font-weight: bold;
+    width: 200px;
+    height: 106px;
+    text-align: center;
+    line-height: 106px;
+    border-bottom: 1px solid #ccc;
+    border-right: 1px solid #ccc;
+}
+
+.ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+    background-color: rgb(24, 144, 255)!important;
+}
+
+.ant-menu-item-selected>a {
+    color: #fff!important;
+}
+
+.ant-menu-item {
+    padding-left: 0px!important;
+}
+
+.ant-menu-inline .ant-menu-item {
+    margin-top: 0px!important;
+}
+
+.ant-menu-item>a {
+    text-align: center;
+}

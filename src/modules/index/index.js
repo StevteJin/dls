@@ -1,0 +1,113 @@
+//主页面，首页
+import React from 'react';
+import store from '../../store/store';
+//导航
+import { MENU } from '../../constants/menudata'
+import b2 from './img/b2.png';
+import b3 from './img/b3.png';
+//引入表格，布局，导航
+import { Layout, Menu } from 'antd';
+import { Link, Route, Switch } from 'react-router-dom';
+//引入路由页面
+//主页
+import U from '../user/index';
+import A from '../list/index';
+//antd样式
+import 'antd/dist/antd.css';
+//公共样式
+import './index.css';
+
+const { Content, Sider } = Layout;
+class MainContent extends React.Component {
+    /*constructor()中完成了React数据的初始化，它接受两个参数：props和context，当想在函数内部使用这两个参数时，需使用super()传入这两个参数。
+注意：只要使用了constructor()就必须写super(),否则会导致this指向错误。*/
+    constructor(props) {
+        super(props)
+        this.state = {
+            collapsed: false,
+            theme: "dark",
+            current: "index",
+            username: store.getState()
+        }
+    }
+    // componentWillMount()一般用的比较少，它更多的是在服务端渲染时使用。它代表的过程是组件已经经历了constructor()初始化数据后，但是还未渲染DOM时。
+    componentWillMount = () => {
+
+    }
+    // 组件第一次渲染完成，此时dom节点已经生成，可以在这里调用ajax请求，返回数据setState后组件会重新渲染
+    componentDidMount = () => {
+        let moren = this.props.location.pathname;
+        this.setState({
+            current: moren.substring(moren.lastIndexOf("/") + 1, moren.lenth)
+        });
+        this.props.history.listen((event) => {
+            let test = event.pathname;
+            let text = test.substring(test.lastIndexOf("/") + 1, test.length);
+            this.setState({
+                current: text
+            });
+        })
+    }
+    // 在此处完成组件的卸载和数据的销毁。
+    componentWillUnmount = () => {
+    }
+    render() {
+        const { username } = this.state;
+        let menuData = MENU;
+        let menuDom = menuData.map((item, index) => (<Menu.Item key={item.key}>
+            <Link to={item.path}><span>{item.name}</span></Link>
+        </Menu.Item>));
+        let menuData1, routeDom;
+        menuData1 = menuData.map((item, index) => {
+            if (item.path == '/index') {
+                item.where = U
+            } else {
+                item.where = A
+            }
+            return item;
+        })
+        console.log('数组1', menuData1)
+        routeDom = menuData1.map((item, index) => (
+            <Route exact path={item.path} component={item.where} />
+        ))
+        return (<div>
+
+            <Layout>
+                <div className="topTitle">
+                    <span className="s1">资管后台管理系统</span>
+                    <span className="s2">HELLO,<img src={b2} alt="" />
+                        <span className='us'>{username}</span></span>
+                </div>
+                <Layout>
+                    <Sider width={200} style={{ background: '#fff' }}>
+                        <div className="username">{username}</div>
+                        <Menu
+                            mode="inline"
+                            defaultSelectedKeys={['1']}
+                            selectedKeys={[this.state.current]}
+                            style={{ height: '100%', borderRight: '1px solid #ccc' }}
+                        >
+                            {menuDom}
+                        </Menu>
+                    </Sider>
+                    <Layout>
+                        <Content
+                            style={{
+                                background: '#fff',
+                                padding: 24,
+                                margin: 0,
+                                minHeight: 280,
+                            }}
+                        >
+                            <Switch>
+                                {routeDom}
+                            </Switch>
+                        </Content>
+                    </Layout>
+                </Layout>
+            </Layout>
+        </div>);
+    }
+}
+
+export default MainContent;
