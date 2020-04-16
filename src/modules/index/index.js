@@ -3,11 +3,14 @@ import React from 'react';
 import store from '../../store/store';
 //导航
 import { MENU } from '../../constants/menudata'
+//引入请求接口
+import httpAxios from '../../helpers/request';
+//图
 import b2 from './img/b2.png';
 import b3 from './img/b3.png';
 //引入表格，布局，导航
 import { Layout, Menu } from 'antd';
-import { Link, Route, Switch } from 'react-router-dom';
+import { Link, Route, Redirect, Switch } from 'react-router-dom';
 //引入路由页面
 //主页
 import U from '../user/index';
@@ -51,8 +54,16 @@ class MainContent extends React.Component {
     // 在此处完成组件的卸载和数据的销毁。
     componentWillUnmount = () => {
     }
+    loginOut() {
+        httpAxios('/logout', 'post', false, null).then(res => {
+            if (res.code === 0) {
+                localStorage.clear();
+                this.props.history.push('/login')
+            }
+        })
+    }
     render() {
-        const { username } = this.state;
+        const username = localStorage.getItem('username') || this.state.username;
         let menuData = MENU;
         let menuDom = menuData.map((item, index) => (<Menu.Item key={item.key}>
             <Link to={item.path}><span>{item.name}</span></Link>
@@ -67,8 +78,13 @@ class MainContent extends React.Component {
             return item;
         })
         console.log('数组1', menuData1)
+        let token = localStorage.getItem('token');
         routeDom = menuData1.map((item, index) => (
-            <Route exact path={item.path} component={item.where} />
+            token ? (<Route exact path={item.path} component={item.where} key={item.key}/>) : (<Redirect
+                to={{
+                    pathname: "/login"
+                }}
+            />)
         ))
         return (<div>
 
@@ -76,7 +92,7 @@ class MainContent extends React.Component {
                 <div className="topTitle">
                     <span className="s1">资管后台管理系统</span>
                     <span className="s2">HELLO,<img src={b2} alt="" />
-                        <span className='us'>{username}</span></span>
+                        <span className='us'>{username}</span>{this.state.username ? <span className='loginout' onClick={() => this.loginOut()}>退出</span> : ''}</span>
                 </div>
                 <Layout>
                     <Sider width={200} style={{ background: '#fff' }}>

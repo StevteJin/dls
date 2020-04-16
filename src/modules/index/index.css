@@ -33,7 +33,11 @@
     color: #5473FF;
     margin-left: 13px;
 }
-
+.topTitle .s2 .loginout {
+    color: #5473FF;
+    cursor: pointer;
+    margin-left:20px;
+}
 .username {
     color: #5473FF;
     font-size: 20px;
