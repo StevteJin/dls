@@ -27,6 +27,7 @@ class EditableTable extends React.Component {
     let url, method, options;
     let moren = this.props.location.pathname;
     MENU.map((item, index) => {
+      //拿搜索框
       if (moren === item.path) {
         console.log(111)
         url = item.url;
@@ -38,20 +39,29 @@ class EditableTable extends React.Component {
         options = null;
       }
     })
+    MENU.map((item, index) => (
+      <div>
+        
+      </div>
+    ))
     httpAxios(url, method, false, options).then(res => {
       if (res.code === 0) {
         res.data.rows.map((item, index) => {
-          for (let key in item) {
-            if (item.hasOwnProperty(key)) {
-              NAME.map((item1, index1) => {
-                if (key == item1.key) {
-                  this.columns.push({
-                    title: item1.name,
-                    dataIndex: item1.key,
-                    key: item1.key
-                  })
-                }
-              })
+          if (index == 0) {
+            for (let key in item) {
+              if (item.hasOwnProperty(key)) {
+                NAME.map((item1, index1) => {
+                  if (key == item1.key) {
+                    this.columns.push({
+                      title: item1.name,
+                      dataIndex: item1.key,
+                      key: item1.key,
+                      align: 'center',
+                      width: 200
+                    })
+                  }
+                })
+              }
             }
           }
         })
@@ -67,28 +77,15 @@ class EditableTable extends React.Component {
 
   render() {
     const { rows } = this.state;
-
-    const columns = this.columns.map(col => {
-      return {
-        ...col,
-        onCell: record => ({
-          record,
-          dataindex: col.dataIndex,
-          title: col.title,
-          key: col.key
-        }),
-      };
-    });
+    const columns = this.columns;
     return (
-      /**
-       * dataSource为数据数组
-       * columns为表格的描述配置，列明什么之类的
-       */
-      <div className="tableBox">
-        <Table
-          dataSource={rows}
-          columns={columns}
-        />
+      <div>
+        <div className="searchBox">
+
+        </div>
+        <div className="tableBox">
+          <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 600 }} />
+        </div>
       </div>
     );
   }

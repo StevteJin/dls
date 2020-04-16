@@ -35,9 +35,9 @@ const name =
     //佣金统计
     { key: 'deal_date', name: '成交日期' },
     { key: 'deal_cnt', name: '成交数量' },
-    { key: 'commission"', name: '当日佣金' },
-    { key: 'is_settled"', name: '是否结算' },
-    { key: 'settle_type"', name: '结算方式' },
+    { key: 'commission', name: '当日佣金' },
+    { key: 'is_settled', name: '是否结算' },
+    { key: 'settle_type', name: '结算方式' },
     { key: 'settle_time', name: '结算时间' },
     { key: 'total_cost', name: '总成交金额' },
     //历史权益
@@ -80,7 +80,7 @@ const name =
     { key: 'sub_type', name: '买卖类型' },
     { key: 'entrust_status', name: '委托状态' },
     { key: 'memo', name: '备注信息' },
-    { key: 'sub_type_desc', name: '买卖类型' },
+    { key: 'sub_type_desc', name: '买卖方向' },
     { key: 'entrust_status_desc', name: '委托状态说明' },
     { key: 'order_date_desc', name: '定时日期' },
     { key: 'order_time_desc', name: '订单时间' },
