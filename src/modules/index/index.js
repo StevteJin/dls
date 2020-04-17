@@ -1,5 +1,7 @@
 //主页面，首页
 import React from 'react';
+//二维码
+import QRCode from 'qrcode.react';
 import store from '../../store/store';
 //导航
 import { MENU } from '../../constants/menudata'
@@ -11,6 +13,7 @@ import b3 from './img/b3.png';
 //引入表格，布局，导航
 import { Layout, Menu } from 'antd';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';
+
 //引入路由页面
 //主页
 import U from '../user/index';
@@ -30,7 +33,8 @@ class MainContent extends React.Component {
             collapsed: false,
             theme: "dark",
             current: "index",
-            username: store.getState()
+            username: store.getState(),
+            qrUrl: ""
         }
     }
     // componentWillMount()一般用的比较少，它更多的是在服务端渲染时使用。它代表的过程是组件已经经历了constructor()初始化数据后，但是还未渲染DOM时。
@@ -50,6 +54,12 @@ class MainContent extends React.Component {
                 current: text
             });
         })
+        let invite_code_desc = localStorage.getItem('invite_code_desc');
+        this.setState({
+            qrUrl: invite_code_desc
+        }, () => {
+            console.log('图啊', this.state.qrUrl)
+        });
     }
     // 在此处完成组件的卸载和数据的销毁。
     componentWillUnmount = () => {
@@ -80,7 +90,7 @@ class MainContent extends React.Component {
         console.log('数组1', menuData1)
         let token = localStorage.getItem('token');
         routeDom = menuData1.map((item, index) => (
-            token ? (<Route exact path={item.path} component={item.where} key={item.key}/>) : (<Redirect
+            token ? (<Route exact path={item.path} component={item.where} key={item.key} />) : (<Redirect
                 to={{
                     pathname: "/login"
                 }}
@@ -97,14 +107,26 @@ class MainContent extends React.Component {
                 <Layout>
                     <Sider width={200} style={{ background: '#fff' }}>
                         <div className="username">{username}</div>
-                        <Menu
-                            mode="inline"
-                            defaultSelectedKeys={['1']}
-                            selectedKeys={[this.state.current]}
-                            style={{ height: '100%', borderRight: '1px solid #ccc' }}
-                        >
-                            {menuDom}
-                        </Menu>
+                        <div className='menuBox'>
+                            <Menu
+                                mode="inline"
+                                defaultSelectedKeys={['1']}
+                                selectedKeys={[this.state.current]}
+                                style={{ height: '100%' }}
+                            >
+                                {menuDom}
+                            </Menu>
+                        </div>
+                        <div className='ercode'>
+                            <div className='ertitle'>我的邀请码</div>
+                            <div className='erimg'>
+                                <QRCode
+                                    value={this.state.qrUrl}
+                                    size={110}
+                                    fgColor="#000000"
+                                />
+                            </div>
+                        </div>
                     </Sider>
                     <Layout>
                         <Content

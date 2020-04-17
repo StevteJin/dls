@@ -6,7 +6,6 @@ import b1 from './img/b1.png';
 import store from '../../store/store'
 //引入请求接口
 import httpAxios from '../../helpers/request';
-
 import './index.css';
 
 class UserCenter extends React.Component {
@@ -16,6 +15,7 @@ class UserCenter extends React.Component {
             data: "",
             username: "",
             account_id: "",
+            invite_code_desc:"",
             balance: "",
             level: "",
             parent_account_name: "",
@@ -34,6 +34,8 @@ class UserCenter extends React.Component {
                     username: data.account_name,
                     //会员id
                     account_id: data.account_id,
+                    //二维码地址
+                    invite_code_desc:data.invite_code_desc,
                     //账户余额
                     balance: data.balance,
                     //用户等级
@@ -45,6 +47,7 @@ class UserCenter extends React.Component {
                 });
                 //这里拿到的username要发出订阅出去，redux订阅
                 localStorage.setItem('username',this.state.username);
+                localStorage.setItem('invite_code_desc',this.state.invite_code_desc);
                 this.username(this.state.username);
             }
         });
@@ -57,7 +60,7 @@ class UserCenter extends React.Component {
         })
     }
     render() {
-        const { username, account_id, balance, level, parent_account_name, parent_account_code } = this.state;
+        const { username, account_id,invite_code_desc, balance, level, parent_account_name, parent_account_code } = this.state;
         return (
             /**
              * dataSource为数据数组

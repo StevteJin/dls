@@ -2,6 +2,9 @@
     width: 100%;
     height: 92px;
     overflow: hidden;
+    box-sizing: border-box;
+    padding-top: 30px;
+    margin-left: 50px;
 }
 
 .tableBox {
@@ -10,4 +13,30 @@
 
 .ant-layout-content {
     padding: 0px!important;
+}
+
+.inputArray {
+    float: left;
+    margin-right: 10px;
+}
+
+.inputArray label {
+    font-size: 14px;
+    line-height: 14px;
+}
+
+.searchInput {
+    width: 87px;
+    height: 14px;
+    line-height: 14px;
+    border-top: 0px;
+    border-left: 0px;
+    border-right: 0px;
+    outline: none;
+}
+
+.searchBtn {
+    font-size: 12px;
+    height: 20px;
+    line-height: 10px;
 }
