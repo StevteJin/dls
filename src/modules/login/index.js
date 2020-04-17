@@ -26,6 +26,15 @@ class login extends React.Component {
         httpAxios('/login', 'post', false, options).then(res => {
             if (res.code === 0) {
                 localStorage.setItem('token', res.data.token);
+                let url = '/api.v1/user/profile', method = 'get', options = null;
+                httpAxios(url, method, false, options).then(res => {
+                    if (res.code === 0) {
+                        let data = res.data;
+                        //这里拿到的username要发出订阅出去，redux订阅
+                        localStorage.setItem('username', data.account_name);
+                        localStorage.setItem('invite_code_desc', data.invite_code_desc);
+                    }
+                });
                 this.props.history.push('/index');
             }
         })

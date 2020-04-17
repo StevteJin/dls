@@ -55,8 +55,10 @@ class MainContent extends React.Component {
             });
         })
         let invite_code_desc = localStorage.getItem('invite_code_desc');
+        let username = localStorage.getItem('username');
         this.setState({
-            qrUrl: invite_code_desc
+            qrUrl: invite_code_desc,
+            username: username
         }, () => {
             console.log('图啊', this.state.qrUrl)
         });
@@ -65,15 +67,15 @@ class MainContent extends React.Component {
     componentWillUnmount = () => {
     }
     loginOut() {
-        httpAxios('/logout', 'post', false, null).then(res => {
-            if (res.code === 0) {
-                localStorage.clear();
-                this.props.history.push('/login')
-            }
-        })
+        localStorage.clear();
+        // httpAxios('/logout', 'post', false, null).then(res => {
+        //     if (res.code === 0) {
+        //         localStorage.clear();
+        //         this.props.history.push('/login')
+        //     }
+        // })
     }
     render() {
-        const username = localStorage.getItem('username') || this.state.username;
         let menuData = MENU;
         let menuDom = menuData.map((item, index) => (<Menu.Item key={item.key}>
             <Link to={item.path}><span>{item.name}</span></Link>
@@ -102,11 +104,11 @@ class MainContent extends React.Component {
                 <div className="topTitle">
                     <span className="s1">资管后台管理系统</span>
                     <span className="s2">HELLO,<img src={b2} alt="" />
-                        <span className='us'>{username}</span>{this.state.username ? <span className='loginout' onClick={() => this.loginOut()}>退出</span> : ''}</span>
+                        <span className='us'>{this.state.username}</span>{this.state.username ? <span className='loginout' onClick={() => this.loginOut()}>退出</span> : ''}</span>
                 </div>
                 <Layout>
                     <Sider width={200} style={{ background: '#fff' }}>
-                        <div className="username">{username}</div>
+                        <div className="username">{this.state.username}</div>
                         <div className='menuBox'>
                             <Menu
                                 mode="inline"
@@ -117,16 +119,17 @@ class MainContent extends React.Component {
                                 {menuDom}
                             </Menu>
                         </div>
-                        <div className='ercode'>
-                            <div className='ertitle'>我的邀请码</div>
-                            <div className='erimg'>
-                                <QRCode
-                                    value={this.state.qrUrl}
-                                    size={110}
-                                    fgColor="#000000"
-                                />
-                            </div>
-                        </div>
+                        {this.state.qrUrl ?
+                            <div className='ercode'>
+                                <div className='ertitle'>我的邀请码</div>
+                                <div className='erimg'>
+                                    <QRCode
+                                        value={this.state.qrUrl}
+                                        size={110}
+                                        fgColor="#000000"
+                                    />
+                                </div>
+                            </div> : ''}
                     </Sider>
                     <Layout>
                         <Content

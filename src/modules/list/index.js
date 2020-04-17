@@ -24,7 +24,9 @@ class EditableTable extends React.Component {
       filter: {},
       option: {},
       wherePath: '',
-      current: 1
+      current: 1,
+      startTime:'',
+      endTime:''
     };
   }
   //请求表格数据的操作
@@ -199,7 +201,7 @@ class EditableTable extends React.Component {
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
         </div> : ''}
         <div className="tableBox">
-          <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 600 }} pagination={false} />
+          <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 700 }} pagination={false} />
           <Pagination size="small" current={this.state.current} onChange={this.onChange} total={total} />
         </div>
       </div>

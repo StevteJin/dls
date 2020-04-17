@@ -46,8 +46,6 @@ class UserCenter extends React.Component {
                     parent_account_code: data.parent_account_code
                 });
                 //这里拿到的username要发出订阅出去，redux订阅
-                localStorage.setItem('username',this.state.username);
-                localStorage.setItem('invite_code_desc',this.state.invite_code_desc);
                 this.username(this.state.username);
             }
         });
