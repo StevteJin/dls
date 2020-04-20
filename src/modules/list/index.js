@@ -403,7 +403,7 @@ class EditableTable extends React.Component {
         </div>
         <div className="tableBox">
           <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 700 }} pagination={false} />
-          <Pagination size="small" current={this.state.current} onChange={this.onChange} total={total} />
+          <Pagination size="small" current={this.state.current} defaultPageSize={20} onChange={this.onChange} total={total} />
         </div>
       </div>
     );
