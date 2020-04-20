@@ -33,8 +33,8 @@ class MainContent extends React.Component {
             collapsed: false,
             theme: "dark",
             current: "",
-            username: store.getState(),
-            qrUrl: ""
+            username: '',
+            qrUrl: ''
         }
     }
     // componentWillMount()一般用的比较少，它更多的是在服务端渲染时使用。它代表的过程是组件已经经历了constructor()初始化数据后，但是还未渲染DOM时。
@@ -60,11 +60,12 @@ class MainContent extends React.Component {
             qrUrl: invite_code_desc,
             username: username
         }, () => {
-            console.log('图啊', this.state.qrUrl)
+            console.log('图啊', this.state.username, this.state.invite_code_desc)
         });
     }
     // 在此处完成组件的卸载和数据的销毁。
     componentWillUnmount = () => {
+
     }
     loginOut() {
         localStorage.clear();
