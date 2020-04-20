@@ -1,6 +1,8 @@
 //此为列表页
 import React from 'react';
-import { Table, Pagination, Input, Button } from 'antd';
+import { Table, Pagination, Input, Button, DatePicker } from 'antd';
+
+
 //引入导航
 import { MENU } from '../../constants/menudata';
 //引入数据字典
@@ -10,6 +12,13 @@ import httpAxios from '../../helpers/request';
 
 import './index.css';
 
+import locale from 'antd/es/date-picker/locale/zh_CN';
+
+import moment from 'moment'
+import 'moment/locale/zh-cn'
+moment.locale('zh-cn')
+
+const { RangePicker } = DatePicker;
 class EditableTable extends React.Component {
   constructor(props) {
     super(props);
@@ -25,8 +34,9 @@ class EditableTable extends React.Component {
       option: {},
       wherePath: '',
       current: 1,
-      startTime:'',
-      endTime:''
+      startTime: '',
+      endTime: '',
+      dateTime: ''
     };
   }
   //请求表格数据的操作
@@ -54,7 +64,7 @@ class EditableTable extends React.Component {
     })
     let filter = {}, option = {};
     MENU.map((item, index) => {
-      if (path == item.path) {
+      if (path == item.path && item.key != 'needTime') {
         item.filter.map((item1, index1) => {
           filter[item1.key] = '';
           option[item1.key] = ''
@@ -63,8 +73,22 @@ class EditableTable extends React.Component {
           filter: filter,
           option: option
         }, () => {
-          console.log('filter啊1', this.state.filter)
+          console.log('结', this.state.filter);
+          let a = this.state.filter;
+          let b = this.state.option;
+          console.log('item', item)
+          // a[item.needTime.key] == this.state.dateTime;
+          // b[item.needTime.key] = item.needTime.value;
+          for (let key in a) {
+            a[item.needTime.key] = this.state.dateTime;
+            this.state.option[item.needTime.key] = item.needTime.value;
+          }
+          // item.needTime.key
+          // item.needTime.value
+          console.log('最终结果', a, b);
         });
+        console.log('filter啊1', this.state.filter)
+
         labelDom = item.filter.map((item1, index1) =>
           (
             <div key={item.path} className='inputArray'>
@@ -77,6 +101,10 @@ class EditableTable extends React.Component {
     this.setState({
       labelDom: labelDom
     });
+  }
+
+  onOk(value) {
+    console.log('onOk: ', value);
   }
   handelChange = event => {
     let e = event.target;
@@ -102,9 +130,10 @@ class EditableTable extends React.Component {
         } else {
           method = 'get'
         }
+        //需要添加时间参数
         options = {
           filter: this.state.filter,
-          option: this.state.option
+          option: this.state.option,
         };
       }
     })
@@ -131,7 +160,7 @@ class EditableTable extends React.Component {
               }
             }
           }
-          this.columns=this.deteleObject(this.columns);
+          this.columns = this.deteleObject(this.columns);
         })
         this.setState({
           data: res.data,
@@ -146,23 +175,23 @@ class EditableTable extends React.Component {
     var uniques = [];
     var stringify = {};
     for (var i = 0; i < obj.length; i++) {
-        var keys = Object.keys(obj[i]);
-        keys.sort(function(a, b) {
-            return (Number(a) - Number(b));
-        });
-        var str = '';
-        for (var j = 0; j < keys.length; j++) {
-            str += JSON.stringify(keys[j]);
-            str += JSON.stringify(obj[i][keys[j]]);
-        }
-        if (!stringify.hasOwnProperty(str)) {
-            uniques.push(obj[i]);
-            stringify[str] = true;
-        }
+      var keys = Object.keys(obj[i]);
+      keys.sort(function (a, b) {
+        return (Number(a) - Number(b));
+      });
+      var str = '';
+      for (var j = 0; j < keys.length; j++) {
+        str += JSON.stringify(keys[j]);
+        str += JSON.stringify(obj[i][keys[j]]);
+      }
+      if (!stringify.hasOwnProperty(str)) {
+        uniques.push(obj[i]);
+        stringify[str] = true;
+      }
     }
     uniques = uniques;
     return uniques;
-}
+  }
   onChange = page => {
     console.log(page);
     this.setState({
@@ -188,7 +217,25 @@ class EditableTable extends React.Component {
       }
     })
     this.getData(url, method, false, options);
-  };
+  }
+
+  onChangeTime = (value, dateString) => {
+    console.log('Selected Time: ', value);
+    console.log('Formatted Selected Time: ', dateString);
+    this.setState({
+      dateTime: dateString[0] + '~' + dateString[1]
+    }, () => {
+      console.log('时间', this.state)
+      var lastkey = "";
+      var jsonobj = this.state.filter;
+      for (var key in jsonobj) {
+        lastkey = key;
+      }
+      console.log('我是', lastkey);
+      this.state.filter[lastkey] = this.state.dateTime;
+      console.log('时间2', this.state)
+    });
+  }
 
   render() {
 
@@ -198,6 +245,16 @@ class EditableTable extends React.Component {
       <div>{wherePath != '/index' ?
         <div className="searchBox">
           {labelDom}
+          <div>
+            <RangePicker
+              showTime={{ format: 'HH:mm' }}
+              format="YYYY-MM-DD HH:mm"
+              onChange={this.onChangeTime}
+              onOk={this.onOk}
+              locale={locale}
+              className='dateStyle'
+            />
+          </div>
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
         </div> : ''}
         <div className="tableBox">

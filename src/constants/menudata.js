@@ -8,8 +8,8 @@ const menu = [{
     key: 'menberList',
     url: '/api.v1/user/list',
     name: '会员列表',
-    filter: [{ key: 'accountId', value: '交易账号', type: 'LIKE' }, { key: 'accountName', value: '账户姓名', type: 'LIKE' }],
-    needTime: { key: 'createTime', value: 'RANGE' }
+    filter: [{ key: 'u.accountId', value: '交易账号', type: 'LIKE' }, { key: 'u.accountName', value: '账户姓名', type: 'LIKE' }],
+    needTime: { key: 'u.createTime', value: 'RANGE' }
 }, {
     path: '/moneyWater',
     key: 'moneyWater',
