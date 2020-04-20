@@ -40,7 +40,7 @@ class login extends React.Component {
         });
         httpAxios('/dictionary', 'get', false, null).then(res => {
             if (res.code === 0) {
-                let a = res.data;
+                let a = JSON.stringify(res.data);
                 localStorage.setItem('localData', a);
             }
         })

@@ -40,14 +40,15 @@ class EditableTable extends React.Component {
       endTime: '',
       dateTime: '',
       qrUrl: '',
-      dictionary: ''
+      dictionary: '',
+      c1: [],
+      c2: []
     };
   }
   //请求表格数据的操作
   componentDidMount = () => {
     let url, method, options;
     let moren = this.props.location.pathname;
-    let localData = localStorage.getItem('localData');
     MENU.map((item, index) => {
       //拿搜索框
       if (moren === item.path) {
@@ -62,7 +63,7 @@ class EditableTable extends React.Component {
       }
     })
     this.getData(url, method, false, options);
-    let labelDom;
+    let labelDom, c1, c2;
     let path = this.props.match.path;
     this.setState({
       wherePath: path
@@ -102,25 +103,30 @@ class EditableTable extends React.Component {
          * 结算方式
          * 买卖方向appoint_type_dict
          */
+        let localData = JSON.parse(localStorage.getItem('localData'));
         let fund_stream_type_dict = localData.fund_stream_type_dict;
-        let fund_stream_source_dict = localData.fund_stream_type_dict;
+        let fund_stream_source_dict = localData.fund_stream_source_dict;
         let appoint_type_dict = localData.appoint_type_dict;
-
-        // let c1 = fund_stream_type_dict.map((item, index) => (<Select style={{ width: 120 }} onChange={handleChange}>
-        //   <Option value={item.k}>{item.v}</Option>
-        // </Select>))
-
-        labelDom = item.filter.map((item1, index1) =>
-          (
+        console.log('数据', item.filter)
+        c1 = fund_stream_type_dict.map((item, index) => (
+          <Option value={item.k}>{item.v}</Option>
+        ))
+        c2 = fund_stream_source_dict.map((item, index) => (
+          <Option value={item.k}>{item.v}</Option>
+        ))
+        labelDom = item.filter.map((item1, index1) => (
+          item1.value != '操作类型' && item1.value != '流水标的' ?
             <div key={item.path} className='inputArray'>
               <label for={item1.key}>{item1.value} : </label>
               <Input id={item1.key} value={item.value} onChange={this.handelChange} className='searchInput' />
             </div>
-          ))
+            : ''))
       }
     })
     this.setState({
-      labelDom: labelDom
+      labelDom: labelDom,
+      c1: c1,
+      c2: c2
     });
   }
   onOk(value) {
@@ -137,6 +143,16 @@ class EditableTable extends React.Component {
       }
     }
     console.log('最后', this.state.filter);
+  }
+
+  handelChange1 = (value, event) => {
+    this.state.filter['type'] = value;
+    console.log('最后2', this.state.filter);
+    this.state.option['type'] = 'LIKE';
+  }
+  handelChange2 = (value, event) => {
+    this.state.filter['source'] = value;
+    this.state.option['source'] = 'LIKE';
   }
   searchNow() {
     let url, method, options;
@@ -294,11 +310,36 @@ class EditableTable extends React.Component {
 
   render() {
 
-    const { rows, labelDom, wherePath, total } = this.state;
+    const { rows, labelDom, c1, c2, wherePath, total } = this.state;
     const columns = this.columns;
     return (
-      <div>{wherePath != '/index' ?
+      <div>{wherePath == '/moneyWater' ?
         <div className="searchBox">
+          {labelDom}
+          <div className='inputArray'>
+            <label>操作类型 :</label>
+            <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange1}>
+              {c1}
+            </Select>
+          </div>
+          <div className='inputArray'>
+            <label>流水标的 :</label>
+            <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange2}>
+              {c2}
+            </Select>
+          </div>
+          <div>
+            <RangePicker
+              showTime={{ format: 'HH:mm' }}
+              format="YYYY-MM-DD HH:mm"
+              onChange={this.onChangeTime}
+              onOk={this.onOk}
+              locale={locale}
+              className='dateStyle'
+            />
+          </div>
+          <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
+        </div> : <div className="searchBox">
           {labelDom}
           <div>
             <RangePicker
@@ -311,7 +352,7 @@ class EditableTable extends React.Component {
             />
           </div>
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
-        </div> : ''}
+        </div>}
         <div className="tableBox">
           <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 700 }} pagination={false} />
           <Pagination size="small" current={this.state.current} onChange={this.onChange} total={total} />
