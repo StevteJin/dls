@@ -221,7 +221,7 @@ class EditableTable extends React.Component {
                         dataIndex: item1.key,
                         key: item1.key,
                         align: 'center',
-                        width: 200
+                        width: 120
                       })
                     } else {
                       this.columns.push({
@@ -402,7 +402,7 @@ class EditableTable extends React.Component {
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
         </div>
         <div className="tableBox">
-          <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 700 }} pagination={false} />
+          <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />
           <Pagination size="small" current={this.state.current} defaultPageSize={20} onChange={this.onChange} total={total} />
         </div>
       </div>
