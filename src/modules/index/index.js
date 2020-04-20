@@ -68,6 +68,7 @@ class MainContent extends React.Component {
     }
     loginOut() {
         localStorage.clear();
+        this.props.history.push('/login')
         // httpAxios('/logout', 'post', false, null).then(res => {
         //     if (res.code === 0) {
         //         localStorage.clear();
