@@ -32,7 +32,7 @@ class MainContent extends React.Component {
         this.state = {
             collapsed: false,
             theme: "dark",
-            current: "index",
+            current: "",
             username: store.getState(),
             qrUrl: ""
         }
@@ -112,7 +112,6 @@ class MainContent extends React.Component {
                         <div className='menuBox'>
                             <Menu
                                 mode="inline"
-                                defaultSelectedKeys={['1']}
                                 selectedKeys={[this.state.current]}
                                 style={{ height: '100%' }}
                             >

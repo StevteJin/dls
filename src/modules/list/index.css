@@ -47,3 +47,31 @@
     line-height: 10px;
     margin-left: 20px;
 }
+
+.ermax {
+    position: relative;
+    z-index: 100000;
+}
+
+.ercode1 {
+    width: 180px;
+    height: 140px;
+    position: absolute;
+    top: 0px;
+    left: 110px;
+}
+
+.ercode1 .erimg1 {
+    width: 140px;
+    height: 140px;
+    background: rgba(255, 255, 255, 1);
+    box-shadow: 0px 0px 10px 0px rgba(38, 52, 115, 0.51);
+    border-radius: 10px;
+    box-sizing: border-box;
+    padding-top: 15px;
+}
+
+.ant-btn-primary {
+    background-color: #5473FF!important;
+    border-color: #5473FF!important;
+}

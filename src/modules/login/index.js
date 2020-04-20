@@ -37,6 +37,12 @@ class login extends React.Component {
                 });
                 this.props.history.push('/index');
             }
+        });
+        httpAxios('/dictionary', 'get', false, null).then(res => {
+            if (res.code === 0) {
+                let a = res.data;
+                localStorage.setItem('localData', a);
+            }
         })
     }
     render() {

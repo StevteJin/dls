@@ -1,7 +1,8 @@
 //此为列表页
 import React from 'react';
-import { Table, Pagination, Input, Button, DatePicker } from 'antd';
-
+import { Table, Pagination, Input, Button, DatePicker, Select } from 'antd';
+//二维码
+import QRCode from 'qrcode.react';
 
 //引入导航
 import { MENU } from '../../constants/menudata';
@@ -9,7 +10,7 @@ import { MENU } from '../../constants/menudata';
 import { NAME } from '../../constants/name';
 //引入请求接口
 import httpAxios from '../../helpers/request';
-
+import erimg from './img/ercode.png';
 import './index.css';
 
 import locale from 'antd/es/date-picker/locale/zh_CN';
@@ -19,6 +20,7 @@ import 'moment/locale/zh-cn'
 moment.locale('zh-cn')
 
 const { RangePicker } = DatePicker;
+const { Option } = Select;
 class EditableTable extends React.Component {
   constructor(props) {
     super(props);
@@ -36,13 +38,16 @@ class EditableTable extends React.Component {
       current: 1,
       startTime: '',
       endTime: '',
-      dateTime: ''
+      dateTime: '',
+      qrUrl: '',
+      dictionary: ''
     };
   }
   //请求表格数据的操作
   componentDidMount = () => {
     let url, method, options;
     let moren = this.props.location.pathname;
+    let localData = localStorage.getItem('localData');
     MENU.map((item, index) => {
       //拿搜索框
       if (moren === item.path) {
@@ -89,6 +94,22 @@ class EditableTable extends React.Component {
         });
         console.log('filter啊1', this.state.filter)
 
+        //操作类型，流水标的，是否结算，结算方式，买卖方向
+        /**
+         * 操作类型：fund_stream_type_dict
+         * 流水标的fund_stream_source_dict
+         * 是否结算
+         * 结算方式
+         * 买卖方向appoint_type_dict
+         */
+        let fund_stream_type_dict = localData.fund_stream_type_dict;
+        let fund_stream_source_dict = localData.fund_stream_type_dict;
+        let appoint_type_dict = localData.appoint_type_dict;
+
+        // let c1 = fund_stream_type_dict.map((item, index) => (<Select style={{ width: 120 }} onChange={handleChange}>
+        //   <Option value={item.k}>{item.v}</Option>
+        // </Select>))
+
         labelDom = item.filter.map((item1, index1) =>
           (
             <div key={item.path} className='inputArray'>
@@ -102,7 +123,6 @@ class EditableTable extends React.Component {
       labelDom: labelDom
     });
   }
-
   onOk(value) {
     console.log('onOk: ', value);
   }
@@ -148,13 +168,35 @@ class EditableTable extends React.Component {
               if (item.hasOwnProperty(key)) {
                 NAME.map((item1, index1) => {
                   if (key == item1.key) {
-                    this.columns.push({
-                      title: item1.name,
-                      dataIndex: item1.key,
-                      key: item1.key,
-                      align: 'center',
-                      width: 200
-                    })
+                    if (key !== 'invite_code_desc') {
+                      this.columns.push({
+                        title: item1.name,
+                        dataIndex: item1.key,
+                        key: item1.key,
+                        align: 'center',
+                        width: 200
+                      })
+                    } else {
+                      this.columns.push({
+                        title: item1.name,
+                        dataIndex: item1.key,
+                        key: item1.key,
+                        align: 'center',
+                        width: 200,
+                        render: (text, record) => (
+                          <div className='ermax'><img onMouseOver={() => this.showImg(text, record)} onMouseOut={() => this.noShowImg()} src={erimg} />{this.state.qrUrl && text == this.state.qrUrl ?
+                            <div className='ercode1'>
+                              <div className='erimg1'>
+                                <QRCode
+                                  value={this.state.qrUrl}
+                                  size={110}
+                                  fgColor="#000000"
+                                />
+                              </div>
+                            </div> : ''}</div>
+                        )
+                      })
+                    }
                   }
                 })
               }
@@ -170,6 +212,19 @@ class EditableTable extends React.Component {
         });
       }
     })
+  }
+  showImg(text, record) {
+    let url = record.invite_code_desc;
+    this.setState({
+      qrUrl: url,
+    }, () => {
+    });
+  }
+  noShowImg() {
+    this.setState({
+      qrUrl: '',
+    }, () => {
+    });
   }
   deteleObject(obj) {
     var uniques = [];

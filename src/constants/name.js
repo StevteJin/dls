@@ -5,7 +5,7 @@ const name =
     { key: 'account_name', name: '账户姓名' },
     { key: 'parent_account_code', name: '推荐人' },
     { key: 'parent_account_name', name: '父账户姓名' },
-    { key: 'invite_code_desc', name: '邀请码Uri' },
+    { key: 'invite_code_desc', name: '邀请码URL' },
     { key: 'finance_period_desc', name: '融资方式' },
     { key: 'finance_ratio', name: '融资倍率' },
     { key: 'manage_fee_rate', name: '管理费率' },
