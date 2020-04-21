@@ -182,8 +182,8 @@ class EditableTable extends React.Component {
     this.state.option['settle_type'] = 'LIKE';
   }
   handelChange5 = (value, event) => {
-    this.state.filter['sub_type'] = value;
-    this.state.option['sub_type'] = 'LIKE';
+    this.state.filter['subType'] = value;
+    this.state.option['subType'] = 'LIKE';
   }
   searchNow() {
     let url, method, options;
