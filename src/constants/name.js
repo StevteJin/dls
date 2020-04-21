@@ -24,6 +24,7 @@ const name =
     { key: 'account_status_desc', name: '会员状态' },
     { key: 'finance_start_date', name: '融资开始日期' },
     { key: 'create_time', name: '创建时间' },
+    { key: 'opeartor_time', name: '操作时间' },
     //资金流水
     { key: 'account_code', name: '会员ID' },
     { key: 'amount', name: '流水金额' },
