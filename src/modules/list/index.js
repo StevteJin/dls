@@ -1,6 +1,6 @@
 //此为列表页
 import React from 'react';
-import { Table, Pagination, Input, Button, DatePicker, Select } from 'antd';
+import { Table, Pagination, Input, Button, DatePicker, Select, Popover } from 'antd';
 //二维码
 import QRCode from 'qrcode.react';
 
@@ -21,6 +21,8 @@ moment.locale('zh-cn')
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
+const dateFormat = 'YYYY-MM-DD';
+
 class EditableTable extends React.Component {
   constructor(props) {
     super(props);
@@ -62,7 +64,23 @@ class EditableTable extends React.Component {
         } else {
           method = 'get'
         }
-        options = null;
+        if (moren == '/historyList') {
+          options = {
+            page: this.state.current,
+            size: 20,
+            sort: 'subTradeScale',
+            order: 'desc',
+            filter: this.state.filter,
+            option: this.state.option
+          };
+        } else {
+          options = {
+            page: this.state.current,
+            size: 20,
+            filter: this.state.filter,
+            option: this.state.option
+          };
+        }
       }
     })
     this.getData(url, method, false, options);
@@ -131,9 +149,9 @@ class EditableTable extends React.Component {
         ))
         labelDom = item.filter.map((item1, index1) => (
           item1.value != '操作类型' && item1.value != '流水标的' && item1.value != '是否结算' && item1.value != '结算方式' && item1.value != '买卖方向' ?
-            <div key={item.path} className='inputArray'>
+            <div key={index1} className='inputArray'>
               <label for={item1.key}>{item1.value} : </label>
-              <Input id={item1.key} value={item.value} onChange={this.handelChange} className='searchInput' />
+              <Input id={item1.key} value={item.value} onChange={this.handelChange} className='searchInput' allowClear={true} />
             </div>
             : ''
         ))
@@ -197,11 +215,23 @@ class EditableTable extends React.Component {
         } else {
           method = 'get'
         }
-        //需要添加时间参数
-        options = {
-          filter: this.state.filter,
-          option: this.state.option,
-        };
+        if (moren == '/historyList') {
+          options = {
+            page: this.state.current,
+            size: 20,
+            sort: 'subTradeScale',
+            order: 'desc',
+            filter: this.state.filter,
+            option: this.state.option
+          };
+        } else {
+          options = {
+            page: this.state.current,
+            size: 20,
+            filter: this.state.filter,
+            option: this.state.option
+          };
+        }
       }
     })
     this.getData(url, method, false, options);
@@ -231,7 +261,7 @@ class EditableTable extends React.Component {
                         align: 'center',
                         width: 200,
                         render: (text, record) => (
-                          <div className='ermax'><img onMouseOver={() => this.showImg(text, record)} onMouseOut={() => this.noShowImg()} src={erimg} />{this.state.qrUrl && text == this.state.qrUrl ?
+                          <div className='ermax'>{text != '' ? <img onMouseOver={() => this.showImg(text, record)} onMouseOut={() => this.noShowImg()} src={erimg} /> : '-'}{this.state.qrUrl && text == this.state.qrUrl ?
                             <div className='ercode1'>
                               <div className='erimg1'>
                                 <QRCode
@@ -298,34 +328,80 @@ class EditableTable extends React.Component {
     console.log(page);
     this.setState({
       current: page,
-    });
-    let url, method, options;
-    let moren = this.props.match.path;
-    MENU.map((item, index) => {
-      //拿搜索框
-      if (moren === item.path) {
-        url = item.url;
-        if (item.path != '/index') {
-          method = 'post'
-        } else {
-          method = 'get'
+    }, () => {
+      let url, method, options;
+      let moren = this.props.match.path;
+      MENU.map((item, index) => {
+        //拿搜索框
+        if (moren === item.path) {
+          url = item.url;
+          if (item.path != '/index') {
+            method = 'post'
+          } else {
+            method = 'get'
+          }
+          if (moren == '/historyList') {
+            options = {
+              page: this.state.current,
+              size: 20,
+              sort: 'subTradeScale',
+              order: 'desc',
+              filter: this.state.filter,
+              option: this.state.option
+            };
+          } else {
+            options = {
+              page: this.state.current,
+              size: 20,
+              filter: this.state.filter,
+              option: this.state.option
+            };
+          }
         }
-        options = {
-          page: this.state.current,
-          size: 20,
-          filter: this.state.filter,
-          option: this.state.option
-        };
-      }
-    })
-    this.getData(url, method, false, options);
+      })
+      this.getData(url, method, false, options);
+    });
   }
-
+  getNowFormatDate = () => {
+    var date = new Date();
+    var seperator1 = "-";
+    var seperator2 = ":";
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var strDate = date.getDate();
+    if (month >= 1 && month <= 9) {
+      month = "0" + month;
+    }
+    if (strDate >= 0 && strDate <= 9) {
+      strDate = "0" + strDate;
+    }
+    var currentdate = year + seperator1 + month + seperator1 + strDate;
+    // + " " + date.getHours() + seperator2 + date.getMinutes()
+    // + seperator2 + date.getSeconds();
+    return currentdate;
+  }
   onChangeTime = (value, dateString) => {
+    let moren = this.props.match.path;
     console.log('Selected Time: ', value);
     console.log('Formatted Selected Time: ', dateString);
+    //历史成交查询,历史委托查询
+    let atime;
+    if (moren == '/registQuery' || moren == '/registEntrust') {
+      if (dateString[0] != '') {
+        atime = dateString[0] + '~' + dateString[1]
+      } else {
+        atime = ''
+      }
+    } else {
+      if (dateString[0] != '') {
+        atime = dateString[0] + ' 00:00' + '~' + dateString[1] + ' 23:59'
+      } else {
+        atime = ''
+      }
+    }
+
     this.setState({
-      dateTime: dateString[0] + '~' + dateString[1]
+      dateTime: atime
     }, () => {
       console.log('时间', this.state)
       var lastkey = "";
@@ -340,7 +416,8 @@ class EditableTable extends React.Component {
   }
 
   render() {
-
+    // let todayDate = this.getNowFormatDate();
+    // console.log('我是当前日期', todayDate, typeof (todayDate))
     const { rows, labelDom, c1, c2, c3, c4, c5, wherePath, total } = this.state;
     const columns = this.columns;
     return (
@@ -351,32 +428,32 @@ class EditableTable extends React.Component {
             <div>
               <div className='inputArray'>
                 <label>操作类型 :</label>
-                <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange1}>
+                <Select style={{ width: 150 }} className='searchSelect' onChange={this.handelChange1} allowClear={true}>
                   {c1}
                 </Select>
               </div>
               <div className='inputArray'>
                 <label>流水标的 :</label>
-                <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange2}>
+                <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange2} allowClear={true}>
                   {c2}
                 </Select>
               </div></div> : (wherePath == '/commissionStatistics' ? <div>
                 <div className='inputArray'>
                   <label>是否结算 :</label>
-                  <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange3}>
+                  <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange3} allowClear={true}>
                     {c3}
                   </Select>
                 </div>
                 <div className='inputArray'>
                   <label>结算方式 :</label>
-                  <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange4}>
+                  <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange4} allowClear={true}>
                     {c4}
                   </Select>
                 </div></div> : (wherePath == '/changeRecord' ?
                   <div>
                     <div className='inputArray'>
                       <label>操作类型 :</label>
-                      <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange1}>
+                      <Select style={{ width: 150 }} className='searchSelect' onChange={this.handelChange1} allowClear={true}>
                         {c1}
                       </Select>
                     </div>
@@ -384,15 +461,13 @@ class EditableTable extends React.Component {
                     <div>
                       <div className='inputArray'>
                         <label>买卖方向 :</label>
-                        <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange5}>
+                        <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange5} allowClear={true}>
                           {c5}
                         </Select>
                       </div>
                     </div> : '')))}
           <div>
             <RangePicker
-              showTime={{ format: 'HH:mm' }}
-              format="YYYY-MM-DD HH:mm"
               onChange={this.onChangeTime}
               onOk={this.onOk}
               locale={locale}
