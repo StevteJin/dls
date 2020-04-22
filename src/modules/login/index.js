@@ -18,6 +18,11 @@ class login extends React.Component {
             password: ''
         }
     }
+    componentWillUnmount = () => {
+        this.setState = (state,callback)=>{
+          return;
+        };
+    }
     loginNow() {
         let options = {
             passport: this.state.username,

@@ -65,7 +65,9 @@ class MainContent extends React.Component {
     }
     // 在此处完成组件的卸载和数据的销毁。
     componentWillUnmount = () => {
-
+        this.setState = (state,callback)=>{
+          return;
+        };
     }
     loginOut() {
         localStorage.clear();
