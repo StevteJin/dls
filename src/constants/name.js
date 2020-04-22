@@ -36,7 +36,7 @@ const name =
     { key: 'opeartor', name: '操作人' },
     { key: 'opeartorTime', name: '操作时间' },
     //佣金统计
-    { key: 'deal_date', name: '交易日期' },
+    // { key: 'deal_date', name: '交易日期' },
     { key: 'deal_cnt', name: '成交数量' },
     { key: 'commission', name: '佣金总和' },
     // { key: 'is_settled', name: '是否结算' },
@@ -57,6 +57,7 @@ const name =
     //持仓变更记录
     { key: 'stock_code', name: '证券代码' },
     { key: 'stock_name', name: '证券名称' },
+    // { key: 'stock_name', name: '证券名称' },
     //历史交割单
     { key: 'stock_no', name: '证券代码' },
     // { key: 'bs_type', name: '买卖方向' },
@@ -77,8 +78,8 @@ const name =
     { key: 'bs_type_desc', name: '买卖方向' },
     //历史成交查询
     { key: 'pk_order', name: '委托PK' },
-    { key: 'order_date', name: '交易日期' },
-    { key: 'msg_time', name: '委托时间' },
+    // { key: 'order_date', name: '交易日期' },
+    // { key: 'msg_time', name: '委托时间' },
     { key: 'deal_avr_price', name: '成交均价' },
     { key: 'fee_amount', name: '手续费' },
     { key: 'happen_amount', name: '发生金额' },
@@ -87,8 +88,8 @@ const name =
     { key: 'memo', name: '备注信息' },
     { key: 'sub_type_desc', name: '买卖方向' },
     { key: 'entrust_status_desc', name: '委托状态' },
-    { key: 'order_date_desc', name: '交易日期' },
-    { key: 'order_time_desc', name: '订单时间' },
+    // { key: 'order_date_desc', name: '交易日期' },
+    // { key: 'order_time_desc', name: '订单时间' },
     //历史委托查询
     //历史结算信息
     { key: 'deal_cnt_buy', name: '总买入数量' },
@@ -105,6 +106,12 @@ const name =
     { key: 'allotted_cnt', name: '持仓数量' },
     { key: 'pre_cost', name: '参考成本' },
     { key: 'pre_close_price', name: '收盘价' },
-    { key: 'profit', name: '参考盈亏' }
+    { key: 'profit', name: '参考盈亏' },
+    { key: 'deal_date_desc', name: '成交日期' },
+    { key: 'deal_time_desc', name: '成交时间' },
+    { key: 'order_date_desc', name: '委托日期' },
+    { key: 'order_time_desc', name: ' 委托时间' },
+    { key: 'amount_number', name: ' 数量' },
+
     ]
 export const NAME = name;

@@ -47,7 +47,7 @@
 
 .searchInput {
     width: 110px;
-    height: 20px;
+    height: 22px;
     line-height: 16px;
     border-top: 0px;
     border-left: 0px;
@@ -96,8 +96,20 @@
     background-color: #5473FF!important;
     border-color: #5473FF!important;
 }
-.ant-picker{
-    border-left:0px;
-    border-right:0px;
-    border-top:0px;
+
+.ant-picker {
+    border-left: 0px;
+    border-right: 0px;
+    border-top: 0px;
 }
+
+.pagen {
+    margin-top: 20px;
+    margin-left: 50px;
+}
+
+/* .ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+} */

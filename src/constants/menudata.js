@@ -36,7 +36,7 @@ const menu = [{
     key: 'changeRecord',
     url: '/api.v1/stock/hold/change/list',
     name: '持仓变动信息',
-    filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }, { key: 'productCode', value: '产品编号', type: 'LIKE' }, { key: 'stockCode', value: '证券代码', type: 'LIKE' }, { key: 'type', value: '操作类型', type: 'LIKE' }],
+    filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }, { key: 'productCode', value: '产品编号', type: 'LIKE' }, { key: 'u.stockCode', value: '证券代码', type: 'LIKE' }, { key: 'type', value: '操作类型', type: 'LIKE' }],
     needTime: { key: 'opeartorTime', value: 'RANGE' }
 }, {
     path: '/registration',

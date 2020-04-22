@@ -1,6 +1,6 @@
 //此为列表页
 import React from 'react';
-import { Table, Pagination, Input, Button, DatePicker, Select, Popover } from 'antd';
+import { Table, Pagination, Input, Button, DatePicker, Select, Tooltip, Popover } from 'antd';
 //二维码
 import QRCode from 'qrcode.react';
 
@@ -267,6 +267,7 @@ class EditableTable extends React.Component {
                         dataIndex: item1.key,
                         key: item1.key,
                         align: 'center',
+                        ellipsis: true,
                         width: 250
                       })
                     } else if (key == 'remark') {
@@ -275,13 +276,15 @@ class EditableTable extends React.Component {
                         dataIndex: item1.key,
                         key: item1.key,
                         align: 'center',
-                        width: 400
+                        ellipsis: true,
+                        width: 300
                       })
                     } else if (key == 'sub_trade_scale') {
                       this.columns.push({
                         title: item1.name,
                         dataIndex: item1.key,
                         key: item1.key,
+                        ellipsis: true,
                         align: 'center',
                         width: 230
                       })
@@ -291,6 +294,7 @@ class EditableTable extends React.Component {
                         dataIndex: item1.key,
                         key: item1.key,
                         align: 'center',
+                        ellipsis: true,
                         width: 200,
                         render: (text, record) => (
                           <div className='ermax'>{text != '' ? <img onMouseOver={() => this.showImg(text, record)} onMouseOut={() => this.noShowImg()} src={erimg} /> : '-'}{this.state.qrUrl && text == this.state.qrUrl ?
@@ -311,6 +315,7 @@ class EditableTable extends React.Component {
                         dataIndex: item1.key,
                         key: item1.key,
                         align: 'center',
+                        ellipsis: true,
                         width: 120
                       })
                     }
@@ -486,7 +491,7 @@ class EditableTable extends React.Component {
                 </div>
                 <div className='inputArray'>
                   <label>结算方式 :</label>
-                  <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange4} allowClear={true}>
+                  <Select style={{ width: 140 }} className='searchSelect' onChange={this.handelChange4} allowClear={true}>
                     {c4}
                   </Select>
                 </div></div> : (wherePath == '/changeRecord' ?
@@ -519,7 +524,9 @@ class EditableTable extends React.Component {
         </div>
         <div className="tableBox">
           <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />
-          <Pagination size="small" current={this.state.current} defaultPageSize={20} onChange={this.onChange} total={total} />
+          <div className="pagen">
+            <Pagination size="small" current={this.state.current} defaultPageSize={20} onChange={this.onChange} total={total} />
+          </div>
         </div>
       </div>
     );
