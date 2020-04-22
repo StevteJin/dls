@@ -151,7 +151,7 @@ class EditableTable extends React.Component {
           item1.value != '操作类型' && item1.value != '流水标的' && item1.value != '是否结算' && item1.value != '结算方式' && item1.value != '买卖方向' ?
             <div key={index1} className='inputArray'>
               <label for={item1.key}>{item1.value} : </label>
-              <Input id={item1.key} value={item.value} onChange={this.handelChange} className='searchInput' allowClear={true} autocomplete="off"/>
+              <Input id={item1.key} value={item.value} onChange={this.handelChange} className='searchInput' allowClear={true} autocomplete="off" />
             </div>
             : ''
         ))
@@ -245,15 +245,31 @@ class EditableTable extends React.Component {
               if (item.hasOwnProperty(key)) {
                 NAME.map((item1, index1) => {
                   if (key == item1.key) {
-                    if (key !== 'invite_code_desc') {
+                    if (key == 'create_time'||key == 'opeartor_time') {
                       this.columns.push({
                         title: item1.name,
                         dataIndex: item1.key,
                         key: item1.key,
                         align: 'center',
-                        width: 120
+                        width: 250
                       })
-                    } else {
+                    } else if (key == 'remark') {
+                      this.columns.push({
+                        title: item1.name,
+                        dataIndex: item1.key,
+                        key: item1.key,
+                        align: 'center',
+                        width: 400
+                      })
+                    } else if (key == 'sub_trade_scale') {
+                      this.columns.push({
+                        title: item1.name,
+                        dataIndex: item1.key,
+                        key: item1.key,
+                        align: 'center',
+                        width: 230
+                      })
+                    } else if (key == 'invite_code_desc') {
                       this.columns.push({
                         title: item1.name,
                         dataIndex: item1.key,
@@ -272,6 +288,14 @@ class EditableTable extends React.Component {
                               </div>
                             </div> : ''}</div>
                         )
+                      })
+                    }else if (key !== 'invite_code_desc') {
+                      this.columns.push({
+                        title: item1.name,
+                        dataIndex: item1.key,
+                        key: item1.key,
+                        align: 'center',
+                        width: 120
                       })
                     }
                   }
@@ -467,7 +491,7 @@ class EditableTable extends React.Component {
                       </div>
                     </div> : '')))}
           <div className='inputArray'>
-          <label>日期 :</label>
+            <label>日期 :</label>
             <RangePicker
               onChange={this.onChangeTime}
               onOk={this.onOk}
