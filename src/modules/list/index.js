@@ -47,7 +47,8 @@ class EditableTable extends React.Component {
       c2: [],
       c3: [],
       c4: [],
-      c5: []
+      c5: [],
+      c6: []
     };
   }
   //请求表格数据的操作
@@ -84,7 +85,7 @@ class EditableTable extends React.Component {
       }
     })
     this.getData(url, method, false, options);
-    let labelDom, c1, c2, c3, c4, c5;
+    let labelDom, c1, c2, c3, c4, c5, c6;
     let path = this.props.match.path;
     this.setState({
       wherePath: path
@@ -130,6 +131,7 @@ class EditableTable extends React.Component {
         let yes_no_dict = localData.yes_no_dict;
         let settle_type_dict = localData.settle_type_dict;
         let appoint_type_dict = localData.appoint_type_dict;
+        let hold_change_type_dict = localData.hold_change_type_dict;
         //操作类型，流水标的
         c1 = fund_stream_type_dict.map((item, index) => (
           <Option value={item.k}>{item.v}</Option>
@@ -145,6 +147,10 @@ class EditableTable extends React.Component {
           <Option value={item.k}>{item.v}</Option>
         ))
         c5 = appoint_type_dict.map((item, index) => (
+          <Option value={item.k}>{item.v}</Option>
+        ))
+        //类型
+        c6 = hold_change_type_dict.map((item, index) => (
           <Option value={item.k}>{item.v}</Option>
         ))
         labelDom = item.filter.map((item1, index1) => (
@@ -163,7 +169,8 @@ class EditableTable extends React.Component {
       c2: c2,
       c3: c3,
       c4: c4,
-      c5: c5
+      c5: c5,
+      c6: c6
     });
   }
   onOk(value) {
@@ -203,38 +210,47 @@ class EditableTable extends React.Component {
     this.state.filter['subType'] = value;
     this.state.option['subType'] = 'LIKE';
   }
+  handelChange6 = (value, event) => {
+    this.state.filter['type'] = value;
+    console.log('最后2', this.state.filter);
+    this.state.option['type'] = 'LIKE';
+  }
   searchNow() {
-    let url, method, options;
-    let moren = this.props.match.path;
-    MENU.map((item, index) => {
-      //拿搜索框
-      if (moren === item.path) {
-        url = item.url;
-        if (item.path != '/index') {
-          method = 'post'
-        } else {
-          method = 'get'
+    this.setState({
+      current: 1
+    }, () => {
+      let url, method, options;
+      let moren = this.props.match.path;
+      MENU.map((item, index) => {
+        //拿搜索框
+        if (moren === item.path) {
+          url = item.url;
+          if (item.path != '/index') {
+            method = 'post'
+          } else {
+            method = 'get'
+          }
+          if (moren == '/historyList') {
+            options = {
+              page: this.state.current,
+              size: 20,
+              sort: 'subTradeScale',
+              order: 'desc',
+              filter: this.state.filter,
+              option: this.state.option
+            };
+          } else {
+            options = {
+              page: this.state.current,
+              size: 20,
+              filter: this.state.filter,
+              option: this.state.option
+            };
+          }
         }
-        if (moren == '/historyList') {
-          options = {
-            page: this.state.current,
-            size: 20,
-            sort: 'subTradeScale',
-            order: 'desc',
-            filter: this.state.filter,
-            option: this.state.option
-          };
-        } else {
-          options = {
-            page: this.state.current,
-            size: 20,
-            filter: this.state.filter,
-            option: this.state.option
-          };
-        }
-      }
-    })
-    this.getData(url, method, false, options);
+      })
+      this.getData(url, method, false, options);
+    });
   }
   getData(url, method, beel, options) {
     httpAxios(url, method, beel, options).then(res => {
@@ -245,7 +261,7 @@ class EditableTable extends React.Component {
               if (item.hasOwnProperty(key)) {
                 NAME.map((item1, index1) => {
                   if (key == item1.key) {
-                    if (key == 'create_time'||key == 'opeartor_time') {
+                    if (key == 'create_time' || key == 'opeartor_time') {
                       this.columns.push({
                         title: item1.name,
                         dataIndex: item1.key,
@@ -289,7 +305,7 @@ class EditableTable extends React.Component {
                             </div> : ''}</div>
                         )
                       })
-                    }else if (key !== 'invite_code_desc') {
+                    } else if (key !== 'invite_code_desc') {
                       this.columns.push({
                         title: item1.name,
                         dataIndex: item1.key,
@@ -442,7 +458,7 @@ class EditableTable extends React.Component {
   render() {
     // let todayDate = this.getNowFormatDate();
     // console.log('我是当前日期', todayDate, typeof (todayDate))
-    const { rows, labelDom, c1, c2, c3, c4, c5, wherePath, total } = this.state;
+    const { rows, labelDom, c1, c2, c3, c4, c5, c6, wherePath, total } = this.state;
     const columns = this.columns;
     return (
       <div>
@@ -476,9 +492,9 @@ class EditableTable extends React.Component {
                 </div></div> : (wherePath == '/changeRecord' ?
                   <div>
                     <div className='inputArray'>
-                      <label>操作类型 :</label>
-                      <Select style={{ width: 150 }} className='searchSelect' onChange={this.handelChange1} allowClear={true}>
-                        {c1}
+                      <label>类型 :</label>
+                      <Select style={{ width: 150 }} className='searchSelect' onChange={this.handelChange6} allowClear={true}>
+                        {c6}
                       </Select>
                     </div>
                   </div> : (wherePath == '/registEntrust' ?
