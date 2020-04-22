@@ -22,7 +22,7 @@
 
 .inputArray label {
     font-size: 14px;
-    line-height: 14px;
+    line-height: 22px;
     float: left;
 }
 
@@ -34,15 +34,17 @@
     border-top: 0px!important;
     border-left: 0px!important;
     border-right: 0px!important;
-    height: 22px!important;
-    line-height: 22px!important;
-    margin-top:-4px;
+    height: 26px!important;
+    line-height: 26px!important;
+    margin-top: -4px;
 }
-.ant-select-selection-search-input{
+
+.ant-select-selection-search-input {
     height: 16px!important;
     line-height: 16px!important;
     box-sizing: border-box;
 }
+
 .searchInput {
     width: 110px;
     height: 20px;
@@ -93,4 +95,9 @@
 .ant-btn-primary {
     background-color: #5473FF!important;
     border-color: #5473FF!important;
+}
+.ant-picker{
+    border-left:0px;
+    border-right:0px;
+    border-top:0px;
 }

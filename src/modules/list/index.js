@@ -151,7 +151,7 @@ class EditableTable extends React.Component {
           item1.value != '操作类型' && item1.value != '流水标的' && item1.value != '是否结算' && item1.value != '结算方式' && item1.value != '买卖方向' ?
             <div key={index1} className='inputArray'>
               <label for={item1.key}>{item1.value} : </label>
-              <Input id={item1.key} value={item.value} onChange={this.handelChange} className='searchInput' allowClear={true} />
+              <Input id={item1.key} value={item.value} onChange={this.handelChange} className='searchInput' allowClear={true} autocomplete="off"/>
             </div>
             : ''
         ))
@@ -466,7 +466,8 @@ class EditableTable extends React.Component {
                         </Select>
                       </div>
                     </div> : '')))}
-          <div>
+          <div className='inputArray'>
+          <label>日期 :</label>
             <RangePicker
               onChange={this.onChangeTime}
               onOk={this.onOk}

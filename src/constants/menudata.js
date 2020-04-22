@@ -35,35 +35,35 @@ const menu = [{
     path: '/changeRecord',
     key: 'changeRecord',
     url: '/api.v1/stock/hold/change/list',
-    name: '持仓变更记录',
+    name: '持仓变动信息',
     filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }, { key: 'productCode', value: '产品编号', type: 'LIKE' }, { key: 'stockCode', value: '证券代码', type: 'LIKE' }, { key: 'type', value: '操作类型', type: 'LIKE' }],
     needTime: { key: 'opeartorTime', value: 'RANGE' }
 }, {
     path: '/registration',
     key: 'registration',
     url: '/api.v1/stock/order/delivery/list',
-    name: '历史交割单',
+    name: '交割单信息',
     filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }, { key: 'orderNo', value: '委托编号', type: 'LIKE' }, { key: 'dealNo', value: '成交编号', type: 'LIKE' }],
     needTime: { key: 'createTime', value: 'RANGE' }
 }, {
     path: '/registQuery',
     key: 'registQuery',
     url: '/api.v1/stock/order/history/deal/list',
-    name: '历史成交查询',
+    name: '成交信息',
     filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }, { key: 'orderNo', value: '委托编号', type: 'LIKE' }, { key: 'dealNo', value: '成交编号', type: 'LIKE' }],
     needTime: { key: 'dealDate', value: 'DATE RANGE' }
 }, {
     path: '/registEntrust',
     key: 'registEntrust',
     url: '/api.v1/stock/order/history/entrust/list',
-    name: '历史委托查询',
+    name: '委托信息',
     filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }, { key: 'orderNo', value: '委托编号', type: 'LIKE' }, { key: 'subType', value: '买卖方向', type: 'LIKE' }],
     needTime: { key: 'orderDate', value: 'DATE RANGE' }
 }, {
     path: '/registSettlement',
     key: 'registSettlement',
     url: '/api.v1/stock/order/settle/list',
-    name: '历史结算查询',
+    name: '结算信息',
     filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }],
     needTime: { key: 'createTime', value: 'RANGE' }
 }, {
