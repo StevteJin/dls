@@ -294,7 +294,6 @@ class EditableTable extends React.Component {
                         dataIndex: item1.key,
                         key: item1.key,
                         align: 'center',
-                        ellipsis: true,
                         width: 200,
                         render: (text, record) => (
                           <div className='ermax'>{text != '' ? <img onMouseOver={() => this.showImg(text, record)} onMouseOut={() => this.noShowImg()} src={erimg} /> : '-'}{this.state.qrUrl && text == this.state.qrUrl ?

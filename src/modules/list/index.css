@@ -46,7 +46,7 @@
 }
 
 .searchInput {
-    width: 110px;
+    width: 140px;
     height: 22px;
     line-height: 16px;
     border-top: 0px;
@@ -54,6 +54,12 @@
     border-right: 0px;
     outline: none;
     float: left;
+}
+
+.searchInput input {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .dateStyle {
@@ -77,9 +83,10 @@
 .ercode1 {
     width: 180px;
     height: 140px;
-    position: absolute;
+    /* position: absolute;
     top: 0px;
-    left: 110px;
+    left: 110px; */
+    margin-left: 110px;
 }
 
 .ercode1 .erimg1 {
