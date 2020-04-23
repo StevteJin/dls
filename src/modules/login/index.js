@@ -1,6 +1,6 @@
 //此为列表页
 import React from 'react';
-import { Input, Button } from 'antd';
+import { Input, Button, Modal } from 'antd';
 //antd样式
 import 'antd/dist/antd.css';
 //公共样式
@@ -15,12 +15,14 @@ class login extends React.Component {
         super(props);
         this.state = {
             username: '',
-            password: ''
+            password: '',
+            visible: false,
+            msg: ''
         }
     }
     componentWillUnmount = () => {
-        this.setState = (state,callback)=>{
-          return;
+        this.setState = (state, callback) => {
+            return;
         };
     }
     loginNow() {
@@ -33,6 +35,7 @@ class login extends React.Component {
                 localStorage.setItem('token', res.data.token);
                 let url = '/api.v1/user/profile', method = 'get', options = null;
                 httpAxios(url, method, false, options).then(res => {
+                    console.log(res)
                     if (res.code === 0) {
                         let data = res.data;
                         //这里拿到的username要发出订阅出去，redux订阅
@@ -40,6 +43,13 @@ class login extends React.Component {
                         localStorage.setItem('invite_code_desc', data.invite_code_desc);
                         this.props.history.push('/index');
                     }
+                });
+            } else {
+                this.setState({
+                    visible: true,
+                    msg: res.msg
+                }, () => {
+                    console.log('666', this.state.msg)
                 });
             }
         });
@@ -50,13 +60,39 @@ class login extends React.Component {
             }
         })
     }
+
+    handleOk = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
+
+    handleCancel = e => {
+        console.log(e);
+        this.setState({
+            visible: false,
+        });
+    };
     render() {
         return (
-            <div className="loginbox">
-                <div className="title">登录</div>
-                <Input value={this.state.username} placeholder="请输入用户名" onChange={e => this.setState({ username: e.target.value })} /><br /><br />
-                <Input.Password value={this.state.password} placeholder="请输入密码" onChange={e => this.setState({ password: e.target.value })} /><br /><br />
-                <Button className="loginButton" type="primary" onClick={() => this.loginNow()}>登录</Button>
+            <div>
+                <Modal
+                    title="提示"
+                    visible={this.state.visible}
+                    onOk={this.handleOk}
+                    onCancel={this.handleCancel}
+                    okText="确定"
+                    cancelText="取消"
+                >
+                    <p>{this.state.msg}</p>
+                </Modal>
+                <div className="loginbox">
+                    <div className="title">登录</div>
+                    <Input value={this.state.username} placeholder="请输入用户名" onChange={e => this.setState({ username: e.target.value })} /><br /><br />
+                    <Input.Password value={this.state.password} placeholder="请输入密码" onChange={e => this.setState({ password: e.target.value })} /><br /><br />
+                    <Button className="loginButton" type="primary" onClick={() => this.loginNow()}>登录</Button>
+                </div>
             </div>
         );
     }
