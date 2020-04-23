@@ -21,11 +21,12 @@ moment.locale('zh-cn')
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-const dateFormat = 'YYYY-MM-DD';
 
+//定义了一个来自React.Component的子类
 class EditableTable extends React.Component {
   constructor(props) {
     super(props);
+    this.myRef = React.createRef();
     //数据字典
     this.columns = [];
     this.state = {
@@ -275,12 +276,12 @@ class EditableTable extends React.Component {
                         align: 'center',
                         width: 200,
                         render: (text, record) => (
-                          <div className='ermax'>{text != '' ? <img onMouseOver={() => this.showImg(text, record)} onMouseOut={() => this.noShowImg()} src={erimg} /> : '-'}{this.state.qrUrl && text == this.state.qrUrl ?
-                            <div className='ercode1'>
-                              <div className='erimg1'>
+                          <div className='ermax'>{text != '' ? <img className='curimg' onClick={() => this.showImg(text, record)} src={erimg} /> : '-'}{this.state.qrUrl && text == this.state.qrUrl ?
+                            <div className='ercode1' onClick={() => this.noShowImg()}>
+                              <div className='erimg1' ref={this.myRef}>
                                 <QRCode
                                   value={this.state.qrUrl}
-                                  size={110}
+                                  size={160}
                                   fgColor="#000000"
                                 />
                               </div>
@@ -314,10 +315,14 @@ class EditableTable extends React.Component {
     })
   }
   showImg(text, record) {
+    console.log('对象',record);
+    let index=this.state.rows.indexOf(record); 
+    console.log('第几项',index);
     let url = record.invite_code_desc;
     this.setState({
       qrUrl: url,
     }, () => {
+      this.myRef.current.style.top = (index/20)*90+'%';
     });
   }
   noShowImg() {
