@@ -2,14 +2,10 @@
 import React from 'react';
 //二维码
 import QRCode from 'qrcode.react';
-import store from '../../store/store';
 //导航
 import { MENU } from '../../constants/menudata'
-//引入请求接口
-import httpAxios from '../../helpers/request';
 //图
 import b2 from './img/b2.png';
-import b3 from './img/b3.png';
 //引入表格，布局，导航
 import { Layout, Menu } from 'antd';
 import { Link, Route, Redirect, Switch } from 'react-router-dom';

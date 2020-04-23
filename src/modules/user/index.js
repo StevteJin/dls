@@ -15,9 +15,7 @@ class UserCenter extends React.Component {
             data: "",
             username: "",
             account_id: "",
-            invite_code_desc:"",
             balance: "",
-            level: "",
             parent_account_name: "",
             parent_account_code: "",
         };
@@ -34,12 +32,8 @@ class UserCenter extends React.Component {
                     username: data.account_name,
                     //会员id
                     account_id: data.account_id,
-                    //二维码地址
-                    invite_code_desc:data.invite_code_desc,
                     //账户余额
                     balance: data.balance,
-                    //用户等级
-                    level: data.level,
                     //parent_account_name
                     parent_account_name: data.parent_account_name,
                     //parent_account_code
@@ -58,7 +52,7 @@ class UserCenter extends React.Component {
         })
     }
     render() {
-        const { username, account_id,invite_code_desc, balance, level, parent_account_name, parent_account_code } = this.state;
+        const { username, account_id , balance, parent_account_name, parent_account_code } = this.state;
         return (
             /**
              * dataSource为数据数组
