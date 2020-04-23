@@ -189,31 +189,10 @@ class EditableTable extends React.Component {
     console.log('最后', this.state.filter);
   }
 
-  handelChange1 = (value, event) => {
-    this.state.filter['type'] = value;
-    console.log('最后2', this.state.filter);
-    this.state.option['type'] = 'LIKE';
-  }
-  handelChange2 = (value, event) => {
-    this.state.filter['source'] = value;
-    this.state.option['source'] = 'LIKE';
-  }
-  handelChange3 = (value, event) => {
-    this.state.filter['is_settled'] = value;
-    this.state.option['is_settled'] = 'LIKE';
-  }
-  handelChange4 = (value, event) => {
-    this.state.filter['settle_type'] = value;
-    this.state.option['settle_type'] = 'LIKE';
-  }
-  handelChange5 = (value, event) => {
-    this.state.filter['subType'] = value;
-    this.state.option['subType'] = 'LIKE';
-  }
-  handelChange6 = (value, event) => {
-    this.state.filter['type'] = value;
-    console.log('最后2', this.state.filter);
-    this.state.option['type'] = 'LIKE';
+  handelChangeOther = (value, event, who) => {
+    this.state.filter[who] = value;
+    console.log('最后2', this.state.filter, '88', value, '99', event, 'who', who);
+    this.state.option[who] = 'LIKE';
   }
   searchNow() {
     this.setState({
@@ -472,32 +451,32 @@ class EditableTable extends React.Component {
             <div>
               <div className='inputArray'>
                 <label>操作类型 :</label>
-                <Select style={{ width: 150 }} className='searchSelect' onChange={this.handelChange1} allowClear={true}>
+                <Select style={{ width: 150 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'type') }} allowClear={true}>
                   {c1}
                 </Select>
               </div>
               <div className='inputArray'>
                 <label>流水标的 :</label>
-                <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange2} allowClear={true}>
+                <Select style={{ width: 120 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'source') }} allowClear={true}>
                   {c2}
                 </Select>
               </div></div> : (wherePath == '/commissionStatistics' ? <div>
                 <div className='inputArray'>
                   <label>是否结算 :</label>
-                  <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange3} allowClear={true}>
+                  <Select style={{ width: 120 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'is_settled') }} allowClear={true}>
                     {c3}
                   </Select>
                 </div>
                 <div className='inputArray'>
                   <label>结算方式 :</label>
-                  <Select style={{ width: 140 }} className='searchSelect' onChange={this.handelChange4} allowClear={true}>
+                  <Select style={{ width: 140 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'settle_type') }} allowClear={true}>
                     {c4}
                   </Select>
                 </div></div> : (wherePath == '/changeRecord' ?
                   <div>
                     <div className='inputArray'>
                       <label>类型 :</label>
-                      <Select style={{ width: 150 }} className='searchSelect' onChange={this.handelChange6} allowClear={true}>
+                      <Select style={{ width: 150 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'type') }} allowClear={true}>
                         {c6}
                       </Select>
                     </div>
@@ -505,7 +484,7 @@ class EditableTable extends React.Component {
                     <div>
                       <div className='inputArray'>
                         <label>买卖方向 :</label>
-                        <Select style={{ width: 120 }} className='searchSelect' onChange={this.handelChange5} allowClear={true}>
+                        <Select style={{ width: 120 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'subType') }} allowClear={true}>
                           {c5}
                         </Select>
                       </div>

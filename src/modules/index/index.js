@@ -61,19 +61,13 @@ class MainContent extends React.Component {
     }
     // 在此处完成组件的卸载和数据的销毁。
     componentWillUnmount = () => {
-        this.setState = (state,callback)=>{
-          return;
+        this.setState = (state, callback) => {
+            return;
         };
     }
     loginOut() {
         localStorage.clear();
         this.props.history.push('/login')
-        // httpAxios('/logout', 'post', false, null).then(res => {
-        //     if (res.code === 0) {
-        //         localStorage.clear();
-        //         this.props.history.push('/login')
-        //     }
-        // })
     }
     render() {
         let menuData = MENU;
