@@ -49,11 +49,17 @@ class EditableTable extends React.Component {
       c3: [],
       c4: [],
       c5: [],
-      c6: []
+      c6: [],
+      nowWeek: ""
     };
   }
   //请求表格数据的操作
   componentDidMount = () => {
+    this.setState({
+      nowWeek: this.getCurrentWeek()
+    }, () => {
+      console.log('我是周时间', this.state.nowWeek, typeof (this.state.nowWeek[0]));
+    })
     let url, method, options;
     let moren = this.props.location.pathname;
     MENU.map((item, index) => {
@@ -85,7 +91,8 @@ class EditableTable extends React.Component {
         }
       }
     })
-    this.getData(url, method, false, options);
+
+
     let labelDom, c1, c2, c3, c4, c5, c6;
     let path = this.props.match.path;
     this.setState({
@@ -115,6 +122,31 @@ class EditableTable extends React.Component {
           // item.needTime.key
           // item.needTime.value
           console.log('最终结果', a, b);
+          //初始化的时候显示数
+          options.filter = this.state.filter;
+          options.option = this.state.option;
+          let atime;
+          if (moren == '/registQuery' || moren == '/registEntrust') {
+            if (this.state.nowWeek[0] != '') {
+              atime = this.state.nowWeek[0] + '~' + this.state.nowWeek[1]
+            } else {
+              atime = " "
+            }
+          } else {
+            if (this.state.nowWeek[0] != '') {
+              atime = this.state.nowWeek[0] + ' 00:00' + '~' + this.state.nowWeek[1] + ' 23:59'
+            } else {
+              atime = " "
+            }
+          }
+          var lastkey = "";
+          var jsonobj = this.state.filter;
+          for (var key in jsonobj) {
+            lastkey = key;
+          }
+          console.log('我是', lastkey);
+          this.state.filter[lastkey] = atime;
+          this.getData(url, method, false, options);
         });
         console.log('filter啊1', this.state.filter)
 
@@ -158,7 +190,7 @@ class EditableTable extends React.Component {
           item1.value != '操作类型' && item1.value != '流水标的' && item1.value != '是否结算' && item1.value != '结算方式' && item1.value != '买卖方向' ?
             <div key={index1} className='inputArray'>
               <label for={item1.key}>{item1.value} : </label>
-              <Input id={item1.key} value={item.value} onChange={this.handelChange} className='searchInput' allowClear={true} autocomplete="off" />
+              <Input id={item1.key} value={item.value} onChange={this.handelChange} className='searchInput' allowClear={true} autoComplete="off" />
             </div>
             : ''
         ))
@@ -177,6 +209,38 @@ class EditableTable extends React.Component {
   onOk(value) {
     console.log('onOk: ', value);
   }
+
+  //获取本周一和周日的时间
+  getCurrentWeek() {
+    //起止日期数组    
+    var startStop = new Array();
+    //获取当前时间    
+    var currentDate = new Date();
+    //返回date是一周中的某一天    
+    var week = currentDate.getDay();
+    //返回date是一个月中的某一天    
+    var month = currentDate.getDate();
+
+    //一天的毫秒数    
+    var millisecond = 1000 * 60 * 60 * 24;
+    //减去的天数    
+    var minusDay = week != 0 ? week - 1 : 4;
+    //alert(minusDay);    
+    //本周 周一    
+    var monday = new Date(currentDate.getTime() - (minusDay * millisecond));
+    //本周 周日    
+    var sunday = new Date(monday.getTime() + (4 * millisecond));
+    monday = moment(monday).format('YYYY-MM-DD');
+    sunday = moment(sunday).format('YYYY-MM-DD');
+    //添加本周时间    
+    startStop.push(monday); //本周起始时间    
+    //添加本周最后一天时间    
+    startStop.push(sunday); //本周终止时间
+    console.log('本周起止时间', startStop);
+    //返回    
+    return startStop;
+  }
+
   handelChange = event => {
     let e = event.target;
     console.log('拿到的', e.id, e.value)
@@ -201,6 +265,7 @@ class EditableTable extends React.Component {
     }, () => {
       let url, method, options;
       let moren = this.props.match.path;
+
       MENU.map((item, index) => {
         //拿搜索框
         if (moren === item.path) {
@@ -315,14 +380,14 @@ class EditableTable extends React.Component {
     })
   }
   showImg(text, record) {
-    console.log('对象',record);
-    let index=this.state.rows.indexOf(record); 
-    console.log('第几项',index);
+    console.log('对象', record);
+    let index = this.state.rows.indexOf(record);
+    console.log('第几项', index);
     let url = record.invite_code_desc;
     this.setState({
       qrUrl: url,
     }, () => {
-      this.myRef.current.style.top = (index/20)*90+'%';
+      this.myRef.current.style.top = (index / 20) * 90 + '%';
     });
   }
   noShowImg() {
@@ -418,13 +483,13 @@ class EditableTable extends React.Component {
       if (dateString[0] != '') {
         atime = dateString[0] + '~' + dateString[1]
       } else {
-        atime = ''
+        atime = this.state.nowWeek[0] + '~' + this.state.nowWeek[1] 
       }
     } else {
       if (dateString[0] != '') {
         atime = dateString[0] + ' 00:00' + '~' + dateString[1] + ' 23:59'
       } else {
-        atime = ''
+        atime = this.state.nowWeek[0] + ' 00:00' + '~' + this.state.nowWeek[1] + ' 23:59'
       }
     }
 
@@ -446,8 +511,13 @@ class EditableTable extends React.Component {
   render() {
     // let todayDate = this.getNowFormatDate();
     // console.log('我是当前日期', todayDate, typeof (todayDate))
-    const { rows, labelDom, c1, c2, c3, c4, c5, c6, wherePath, total } = this.state;
+    const { rows, labelDom, c1, c2, c3, c4, c5, c6, wherePath, total, nowWeek } = this.state;
     const columns = this.columns;
+    const dateFormat = 'YYYY-MM-DD';
+    const dateFormatList = ['YYYY-MM-DD', 'YYYY-MM-DD'];
+    const a = moment(nowWeek[0]);
+    const b = moment(nowWeek[1]);
+    console.log('拿到的周值啊', nowWeek, a, b, typeof (a));
     return (
       <div>
         <div className="searchBox">
@@ -501,6 +571,7 @@ class EditableTable extends React.Component {
               onOk={this.onOk}
               locale={locale}
               className='dateStyle'
+              placeholder={[this.state.nowWeek[0], this.state.nowWeek[1]]}
             />
           </div>
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
