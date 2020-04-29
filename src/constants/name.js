@@ -44,7 +44,7 @@ const name =
     { key: 'is_settled_desc', name: '是否结算' },
     { key: 'settle_type_desc', name: '结算方式' },
     { key: 'settle_time', name: '结算时间' },
-    { key: 'total_cost', name: '总成交金额' },
+    { key: 'total_cost', name: '总结算金额' },
     //历史权益
     { key: 'balance', name: '账户余额' },
     { key: 'total_scale', name: '总资产' },
