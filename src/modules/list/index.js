@@ -29,6 +29,8 @@ class EditableTable extends React.Component {
     this.myRef = React.createRef();
     //数据字典
     this.columns = [];
+    //底部统计
+    this.columnv = [];
     this.state = {
       count: 1,
       data: "",
@@ -50,7 +52,8 @@ class EditableTable extends React.Component {
       c4: [],
       c5: [],
       c6: [],
-      nowWeek: ""
+      nowWeek: "",
+      allList: []
     };
   }
   //请求表格数据的操作
@@ -363,18 +366,56 @@ class EditableTable extends React.Component {
                         width: 120
                       })
                     }
+                    if (key == 'account_code' && this.state.wherePath == '/commissionStatistics') {
+                      this.columnv.push({
+                        title: item1.name,
+                        dataIndex: item1.key,
+                        key: item1.key,
+                        align: 'center',
+                        ellipsis: true,
+                        width: 140,
+                        render: (text, record) => <span>金额统计</span>
+                      })
+                    } else if (key != 'account_code' && this.state.wherePath == '/commissionStatistics') {
+                      this.columnv.push({
+                        title: item1.name,
+                        dataIndex: item1.key,
+                        key: item1.key,
+                        align: 'center',
+                        ellipsis: true,
+                        width: 170
+                      })
+                    }
                   }
                 })
               }
             }
           }
           this.columns = this.deteleObject(this.columns);
+          this.columnv = this.deteleObject(this.columnv);
         })
         this.setState({
           data: res.data,
           total: res.data.total || null,
           rows: res.data.rows || null,
           count: parseInt(this.total / 20)
+        }, () => {
+          let aL = [JSON.parse(JSON.stringify(this.state.rows[0]))];
+          aL = aL.map((item, index) => {
+            console.log(item)
+            for (let key in item) {
+              if (key == 'total_cost_all') {
+                item[key] = '10000'
+              } else {
+                item[key] = ''
+              }
+            }
+            return item;
+          })
+          console.log('我是啊', aL)
+          this.setState({
+            allList: aL
+          })
         });
       }
     })
@@ -483,7 +524,7 @@ class EditableTable extends React.Component {
       if (dateString[0] != '') {
         atime = dateString[0] + '~' + dateString[1]
       } else {
-        atime = this.state.nowWeek[0] + '~' + this.state.nowWeek[1] 
+        atime = this.state.nowWeek[0] + '~' + this.state.nowWeek[1]
       }
     } else {
       if (dateString[0] != '') {
@@ -513,6 +554,7 @@ class EditableTable extends React.Component {
     // console.log('我是当前日期', todayDate, typeof (todayDate))
     const { rows, labelDom, c1, c2, c3, c4, c5, c6, wherePath, total, nowWeek } = this.state;
     const columns = this.columns;
+    const columnv = this.columnv;
     const dateFormat = 'YYYY-MM-DD';
     const dateFormatList = ['YYYY-MM-DD', 'YYYY-MM-DD'];
     const a = moment(nowWeek[0]);
@@ -577,7 +619,10 @@ class EditableTable extends React.Component {
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
         </div>
         <div className="tableBox">
-          <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />
+          {wherePath == '/commissionStatistics' ?
+            <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 570 }} pagination={false} footer={() => {
+              return (<Table showHeader={false} bordered columns={columnv} dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} />)
+            }} /> : <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />}
           <div className="pagen">
             <Pagination size="small" current={this.state.current} defaultPageSize={20} onChange={this.onChange} total={total} />
           </div>
