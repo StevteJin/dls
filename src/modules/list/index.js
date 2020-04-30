@@ -53,6 +53,7 @@ class EditableTable extends React.Component {
       c5: [],
       c6: [],
       nowWeek: "",
+      extend: "",
       allList: []
     };
   }
@@ -366,25 +367,63 @@ class EditableTable extends React.Component {
                         width: 120
                       })
                     }
-                    if (key == 'account_code' && this.state.wherePath == '/commissionStatistics') {
-                      this.columnv.push({
-                        title: item1.name,
-                        dataIndex: item1.key,
-                        key: item1.key,
-                        align: 'center',
-                        ellipsis: true,
-                        width: 140,
-                        render: (text, record) => <span>金额统计</span>
-                      })
-                    } else if (key != 'account_code' && this.state.wherePath == '/commissionStatistics') {
-                      this.columnv.push({
-                        title: item1.name,
-                        dataIndex: item1.key,
-                        key: item1.key,
-                        align: 'center',
-                        ellipsis: true,
-                        width: 170
-                      })
+
+                    if (this.state.wherePath == '/commissionStatistics') {
+                      if (key == 'account_code') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 120,
+                          render: (text, record) => <span>统计</span>
+                        })
+                      } else if (key == 'create_time' || key == 'opeartor_time') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 250
+                        })
+                      } else if (key == 'remark') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 300
+                        })
+                      } else if (key == 'sub_trade_scale') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          ellipsis: true,
+                          align: 'center',
+                          width: 230
+                        })
+                      } else if (key == 'invite_code_desc') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          width: 200
+                        })
+                      } else {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 120
+                        })
+                      }
                     }
                   }
                 })
@@ -398,16 +437,20 @@ class EditableTable extends React.Component {
           data: res.data,
           total: res.data.total || null,
           rows: res.data.rows || null,
+          //统计数据
+          extend: res.data.extend || null,
           count: parseInt(this.total / 20)
         }, () => {
+          //拷贝一个新数组
           let aL = [JSON.parse(JSON.stringify(this.state.rows[0]))];
+
           aL = aL.map((item, index) => {
             console.log(item)
             for (let key in item) {
-              if (key == 'total_cost_all') {
-                item[key] = '10000'
+              if (item.hasOwnProperty(key) && this.state.extend.hasOwnProperty(key)) {
+                item[key] = this.state.extend[key];
               } else {
-                item[key] = ''
+                item[key] = '-'
               }
             }
             return item;
@@ -621,7 +664,7 @@ class EditableTable extends React.Component {
         <div className="tableBox">
           {wherePath == '/commissionStatistics' ?
             <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 570 }} pagination={false} footer={() => {
-              return (<Table showHeader={false} bordered columns={columnv} dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} />)
+              return (<Table showHeader={false} columns={columnv} size="small" dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} />)
             }} /> : <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />}
           <div className="pagen">
             <Pagination size="small" current={this.state.current} defaultPageSize={20} onChange={this.onChange} total={total} />
