@@ -367,8 +367,182 @@ class EditableTable extends React.Component {
                         width: 120
                       })
                     }
-
+                    //佣金统计
                     if (this.state.wherePath == '/commissionStatistics') {
+                      if (key == 'account_code') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 120,
+                          render: (text, record) => <span>统计</span>
+                        })
+                      } else if (key == 'create_time' || key == 'opeartor_time') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 250
+                        })
+                      } else if (key == 'remark') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 300
+                        })
+                      } else if (key == 'sub_trade_scale') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          ellipsis: true,
+                          align: 'center',
+                          width: 230
+                        })
+                      } else if (key == 'invite_code_desc') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          width: 200
+                        })
+                      } else {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 120
+                        })
+                      }
+                    }
+                    //成交信息
+                    if (this.state.wherePath == '/registQuery') {
+                      if (key == 'deal_date_desc') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 120,
+                          render: (text, record) => <span>统计</span>
+                        })
+                      } else if (key == 'create_time' || key == 'opeartor_time') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 250
+                        })
+                      } else if (key == 'remark') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 300
+                        })
+                      } else if (key == 'sub_trade_scale') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          ellipsis: true,
+                          align: 'center',
+                          width: 230
+                        })
+                      } else if (key == 'invite_code_desc') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          width: 200
+                        })
+                      } else {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 120
+                        })
+                      }
+                    }
+                    //委托信息
+                    if (this.state.wherePath == '/registEntrust') {
+                      if (key == 'order_date_desc') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 120,
+                          render: (text, record) => <span>统计</span>
+                        })
+                      } else if (key == 'create_time' || key == 'opeartor_time') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 250
+                        })
+                      } else if (key == 'remark') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 300
+                        })
+                      } else if (key == 'sub_trade_scale') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          ellipsis: true,
+                          align: 'center',
+                          width: 230
+                        })
+                      } else if (key == 'invite_code_desc') {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          width: 200
+                        })
+                      } else {
+                        this.columnv.push({
+                          title: item1.name,
+                          dataIndex: item1.key,
+                          key: item1.key,
+                          align: 'center',
+                          ellipsis: true,
+                          width: 120
+                        })
+                      }
+                    }
+                    //结算信息
+                    if (this.state.wherePath == '/registSettlement') {
                       if (key == 'account_code') {
                         this.columnv.push({
                           title: item1.name,
@@ -441,24 +615,26 @@ class EditableTable extends React.Component {
           extend: res.data.extend || null,
           count: parseInt(this.total / 20)
         }, () => {
-          //拷贝一个新数组
-          let aL = [JSON.parse(JSON.stringify(this.state.rows[0]))];
-
-          aL = aL.map((item, index) => {
-            console.log(item)
-            for (let key in item) {
-              if (item.hasOwnProperty(key) && this.state.extend.hasOwnProperty(key)) {
-                item[key] = this.state.extend[key];
-              } else {
-                item[key] = '-'
+          if (this.state.wherePath == '/commissionStatistics' || this.state.wherePath == '/registQuery' || this.state.wherePath == '/registEntrust' || this.state.wherePath == '/registSettlement') {
+            //拷贝一个新数组
+            let aL = [JSON.parse(JSON.stringify(this.state.rows[0]))];
+            aL = aL.map((item, index) => {
+              console.log(item)
+              for (let key in item) {
+                if (item.hasOwnProperty(key) && this.state.extend.hasOwnProperty(key)) {
+                  item[key] = this.state.extend[key];
+                } else {
+                  item[key] = '-'
+                }
               }
-            }
-            return item;
-          })
-          console.log('我是啊', aL)
-          this.setState({
-            allList: aL
-          })
+              return item;
+            })
+            console.log('我是啊', aL)
+            this.setState({
+              allList: aL
+            }, () => {
+            })
+          }
         });
       }
     })
@@ -662,9 +838,9 @@ class EditableTable extends React.Component {
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
         </div>
         <div className="tableBox">
-          {wherePath == '/commissionStatistics' ?
+          {wherePath == '/commissionStatistics' || wherePath == '/registQuery' || wherePath == '/registEntrust' || wherePath == '/registSettlement' ?
             <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 570 }} pagination={false} footer={() => {
-              return (<Table showHeader={false} columns={columnv} size="small" dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} />)
+              return (wherePath != '/registEntrust' ? <Table showHeader={false} columns={columnv} size="small" dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} /> : <Table showHeader={false} scroll={{ y: 670 }} columns={columnv} size="small" dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} />)
             }} /> : <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />}
           <div className="pagen">
             <Pagination size="small" current={this.state.current} defaultPageSize={20} onChange={this.onChange} total={total} />

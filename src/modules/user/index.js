@@ -94,7 +94,7 @@ class UserCenter extends React.Component {
                         <div className="b3">{balance}</div>
                     </div>
                     <div className="userbox">
-                        <div className="b1">己推数</div>
+                        <div className="b1">用户数量</div>
                         <div className="b2">INVITE COUNT</div>
                         <div className="b3">{invite_count}</div>
                     </div>
