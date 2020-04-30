@@ -18,6 +18,7 @@ class UserCenter extends React.Component {
             balance: "",
             parent_account_name: "",
             parent_account_code: "",
+            invite_count: ""
         };
     }
     //请求表格数据的操作
@@ -37,7 +38,8 @@ class UserCenter extends React.Component {
                     //parent_account_name
                     parent_account_name: data.parent_account_name,
                     //parent_account_code
-                    parent_account_code: data.parent_account_code
+                    parent_account_code: data.parent_account_code,
+                    invite_count: data.invite_count
                 });
                 //这里拿到的username要发出订阅出去，redux订阅
                 this.username(this.state.username);
@@ -48,11 +50,11 @@ class UserCenter extends React.Component {
         //store.dispatch（）是View发出Action的唯一方法。携带一个Action对象作为参数，将它发送出去。
         store.dispatch({
             type: 'username',
-            payload:username
+            payload: username
         })
     }
     render() {
-        const { username, account_id , balance, parent_account_name, parent_account_code } = this.state;
+        const { username, account_id, balance, parent_account_name, parent_account_code, invite_count } = this.state;
         return (
             /**
              * dataSource为数据数组
@@ -90,6 +92,11 @@ class UserCenter extends React.Component {
                         <div className="b1">账户余额</div>
                         <div className="b2">ACCOUNT BALANCE</div>
                         <div className="b3">{balance}</div>
+                    </div>
+                    <div className="userbox">
+                        <div className="b1">己推数</div>
+                        <div className="b2">INVITE COUNT</div>
+                        <div className="b3">{invite_count}</div>
                     </div>
                 </div>
             </div>

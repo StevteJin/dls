@@ -63,6 +63,7 @@
 .usercenter .bottomuser .userbox {
     width: 384px;
     height: 176px;
+    margin-bottom: 20px;
     border: 1px solid #EDEDED;
     float: left;
     margin-right: 18px;
