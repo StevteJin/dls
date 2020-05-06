@@ -54,7 +54,8 @@ class EditableTable extends React.Component {
       c6: [],
       nowWeek: "",
       extend: "",
-      allList: []
+      allList: [],
+      whereClass: ""
     };
   }
   //请求表格数据的操作
@@ -101,6 +102,10 @@ class EditableTable extends React.Component {
     let path = this.props.match.path;
     this.setState({
       wherePath: path
+    }, () => {
+      this.setState({
+        whereClass: this.state.wherePath.replace("/", "")
+      })
     })
     let filter = {}, option = {};
     MENU.map((item, index) => {
@@ -136,6 +141,8 @@ class EditableTable extends React.Component {
             } else {
               atime = " "
             }
+          } else if (moren == '/menberList') {
+            atime = " "
           } else {
             if (this.state.nowWeek[0] != '') {
               atime = this.state.nowWeek[0] + ' 00:00' + '~' + this.state.nowWeek[1] + ' 23:59'
@@ -616,24 +623,56 @@ class EditableTable extends React.Component {
           count: parseInt(this.total / 20)
         }, () => {
           if (this.state.wherePath == '/commissionStatistics' || this.state.wherePath == '/registQuery' || this.state.wherePath == '/registEntrust' || this.state.wherePath == '/registSettlement') {
-            //拷贝一个新数组
-            let aL = [JSON.parse(JSON.stringify(this.state.rows[0]))];
-            aL = aL.map((item, index) => {
-              console.log(item)
-              for (let key in item) {
-                if (item.hasOwnProperty(key) && this.state.extend.hasOwnProperty(key)) {
-                  item[key] = this.state.extend[key];
-                } else {
-                  item[key] = '-'
+            if (this.state.rows.length > 0) {
+              //把数据push进去
+              let AK = this.state.rows;
+              //拷贝一个新数组
+              let aL = [JSON.parse(JSON.stringify(this.state.rows[0]))];
+              aL = aL.map((item, index) => {
+                console.log('序列', item, index)
+                for (let key in item) {
+                  if (item.hasOwnProperty(key) && this.state.extend.hasOwnProperty(key)) {
+                    item[key] = this.state.extend[key];
+                  } else {
+                    item[key] = '-'
+                  }
                 }
-              }
-              return item;
-            })
-            console.log('我是啊', aL)
-            this.setState({
-              allList: aL
-            }, () => {
-            })
+                return item;
+              })
+              console.log('我是新数组', aL)
+              // let keya = Object.keys(aL[0])[0];
+              this.setState({
+                allList: aL
+              }, () => {
+                // AK = AK.push(this.state.allList[0])
+                this.setState({
+                  rows: [...AK, this.state.allList[0]]
+                }, () => {
+                  if (this.state.rows.length > 0) {
+                    //统计
+                    let aLength = this.state.rows;
+                    //佣金统计
+                    if (this.state.wherePath == '/commissionStatistics') {
+                      this.state.rows[aLength.length - 1]['account_code'] = '统计'
+                    }
+                    //成交信息
+                    if (this.state.wherePath == '/registQuery') {
+                      this.state.rows[aLength.length - 1]['deal_date_desc'] = '统计'
+                    }
+                    //委托信息
+                    if (this.state.wherePath == '/registEntrust') {
+                      this.state.rows[aLength.length - 1]['order_date_desc'] = '统计'
+                    }
+                    //结算信息
+                    if (this.state.wherePath == '/registSettlement') {
+                      this.state.rows[aLength.length - 1]['account_code'] = '统计'
+                    }
+                  }
+                })
+                console.log('大', this.state.rows, typeof (this.state.rows));
+              })
+
+            }
           }
         });
       }
@@ -745,6 +784,12 @@ class EditableTable extends React.Component {
       } else {
         atime = this.state.nowWeek[0] + '~' + this.state.nowWeek[1]
       }
+    } else if (moren == '/menberList') {
+      if (dateString[0] != '') {
+        atime = dateString[0] + ' 00:00' + '~' + dateString[1] + ' 23:59'
+      } else {
+        atime = ""
+      }
     } else {
       if (dateString[0] != '') {
         atime = dateString[0] + ' 00:00' + '~' + dateString[1] + ' 23:59'
@@ -771,7 +816,7 @@ class EditableTable extends React.Component {
   render() {
     // let todayDate = this.getNowFormatDate();
     // console.log('我是当前日期', todayDate, typeof (todayDate))
-    const { rows, labelDom, c1, c2, c3, c4, c5, c6, wherePath, total, nowWeek } = this.state;
+    const { rows, labelDom, c1, c2, c3, c4, c5, c6, wherePath, whereClass, total, nowWeek } = this.state;
     const columns = this.columns;
     const columnv = this.columnv;
     const dateFormat = 'YYYY-MM-DD';
@@ -827,21 +872,30 @@ class EditableTable extends React.Component {
                     </div> : '')))}
           <div className='inputArray'>
             <label>日期 :</label>
-            <RangePicker
-              onChange={this.onChangeTime}
-              onOk={this.onOk}
-              locale={locale}
-              className='dateStyle'
-              placeholder={[this.state.nowWeek[0], this.state.nowWeek[1]]}
-            />
+            {
+              wherePath != '/menberList' ? <RangePicker
+                onChange={this.onChangeTime}
+                onOk={this.onOk}
+                locale={locale}
+                className='dateStyle'
+                placeholder={[this.state.nowWeek[0], this.state.nowWeek[1]]}
+              /> : <RangePicker
+                  onChange={this.onChangeTime}
+                  onOk={this.onOk}
+                  locale={locale}
+                  className='dateStyle'
+                />
+            }
+
           </div>
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
         </div>
         <div className="tableBox">
-          {wherePath == '/commissionStatistics' || wherePath == '/registQuery' || wherePath == '/registEntrust' || wherePath == '/registSettlement' ?
+          {/* {(wherePath == '/commissionStatistics' && rows.length > 0) || (wherePath == '/registQuery' && rows.length > 0) || (wherePath == '/registEntrust' && rows.length > 0) || (wherePath == '/registSettlement' && rows.length > 0) ?
             <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 570 }} pagination={false} footer={() => {
               return (wherePath != '/registEntrust' ? <Table showHeader={false} columns={columnv} size="small" dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} /> : <Table showHeader={false} scroll={{ y: 670 }} columns={columnv} size="small" dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} />)
-            }} /> : <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />}
+            }} /> : <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />} */}
+          <Table className={whereClass} dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />
           <div className="pagen">
             <Pagination size="small" current={this.state.current} defaultPageSize={20} onChange={this.onChange} total={total} />
           </div>

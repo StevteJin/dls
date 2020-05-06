@@ -127,4 +127,43 @@
     text-overflow: ellipsis;
 } */
 
-.ant-table.ant-table-small .ant-table-footer{padding:0px;padding-top:6px;}
+.ant-table.ant-table-small .ant-table-footer {
+    padding: 0px;
+    padding-top: 6px;
+}
+
+.commissionStatistics .ant-table-row:last-child {
+    background-color: #65666b;
+    color: #fff;
+}
+
+.commissionStatistics .ant-table-row:last-child:hover {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.registQuery .ant-table-row:last-child {
+    background-color: #65666b;
+    color: #fff;
+}
+
+.registQuery .ant-table-row:last-child:hover {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.registEntrust .ant-table-row:last-child {
+    background-color: #65666b;
+    color: #fff;
+}
+
+.registEntrust .ant-table-row:last-child:hover {
+    color: rgba(0, 0, 0, 0.65);
+}
+
+.registSettlement .ant-table-row:last-child {
+    background-color: #65666b;
+    color: #fff;
+}
+
+.registSettlement .ant-table-row:last-child:hover {
+    color: rgba(0, 0, 0, 0.65);
+}
