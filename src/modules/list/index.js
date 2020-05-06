@@ -80,7 +80,7 @@ class EditableTable extends React.Component {
         if (moren == '/historyList') {
           options = {
             page: this.state.current,
-            size: 20,
+            size: 16,
             sort: 'subTradeScale',
             order: 'desc',
             filter: this.state.filter,
@@ -89,7 +89,7 @@ class EditableTable extends React.Component {
         } else {
           options = {
             page: this.state.current,
-            size: 20,
+            size: 16,
             filter: this.state.filter,
             option: this.state.option
           };
@@ -289,7 +289,7 @@ class EditableTable extends React.Component {
           if (moren == '/historyList') {
             options = {
               page: this.state.current,
-              size: 20,
+              size: 16,
               sort: 'subTradeScale',
               order: 'desc',
               filter: this.state.filter,
@@ -298,7 +298,7 @@ class EditableTable extends React.Component {
           } else {
             options = {
               page: this.state.current,
-              size: 20,
+              size: 16,
               filter: this.state.filter,
               option: this.state.option
             };
@@ -735,7 +735,7 @@ class EditableTable extends React.Component {
           if (moren == '/historyList') {
             options = {
               page: this.state.current,
-              size: 20,
+              size: 16,
               sort: 'subTradeScale',
               order: 'desc',
               filter: this.state.filter,
@@ -744,7 +744,7 @@ class EditableTable extends React.Component {
           } else {
             options = {
               page: this.state.current,
-              size: 20,
+              size: 16,
               filter: this.state.filter,
               option: this.state.option
             };
@@ -897,7 +897,7 @@ class EditableTable extends React.Component {
             }} /> : <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />} */}
           <Table className={whereClass} dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />
           <div className="pagen">
-            <Pagination size="small" current={this.state.current} defaultPageSize={20} onChange={this.onChange} total={total} />
+            <Pagination size="small" current={this.state.current} defaultPageSize={16} onChange={this.onChange} total={total} />
           </div>
         </div>
       </div>
