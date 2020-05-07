@@ -60,16 +60,30 @@ class EditableTable extends React.Component {
   }
   //请求表格数据的操作
   componentDidMount = () => {
+    //这是用来获取本周一和周五日期的
     this.setState({
       nowWeek: this.getCurrentWeek()
     }, () => {
-      console.log('我是周时间', this.state.nowWeek, typeof (this.state.nowWeek[0]));
+      // console.log('我是周时间', this.state.nowWeek, typeof (this.state.nowWeek[0]));
     })
+    //url为请求地址,method为请求方式，options为参数
     let url, method, options;
-    let moren = this.props.location.pathname;
+    //用来取当前路由的
+    let path = this.props.match.path;
+    //filter和option为请求列表的参数
+    let filter = {}, option = {};
+    let labelDom, c1, c2, c3, c4, c5, c6;
+    //用whereClass区分各自结构的Class
+    this.setState({
+      wherePath: path
+    }, () => {
+      this.setState({
+        whereClass: this.state.wherePath.replace("/", "")
+      })
+    })
     MENU.map((item, index) => {
       //拿搜索框
-      if (moren === item.path) {
+      if (path === item.path) {
         console.log(111)
         url = item.url;
         if (item.path != '/index') {
@@ -77,7 +91,7 @@ class EditableTable extends React.Component {
         } else {
           method = 'get'
         }
-        if (moren == '/historyList') {
+        if (path == '/historyList') {
           options = {
             page: this.state.current,
             size: 16,
@@ -95,20 +109,7 @@ class EditableTable extends React.Component {
           };
         }
       }
-    })
 
-
-    let labelDom, c1, c2, c3, c4, c5, c6;
-    let path = this.props.match.path;
-    this.setState({
-      wherePath: path
-    }, () => {
-      this.setState({
-        whereClass: this.state.wherePath.replace("/", "")
-      })
-    })
-    let filter = {}, option = {};
-    MENU.map((item, index) => {
       if (path == item.path && item.key != 'needTime') {
         item.filter.map((item1, index1) => {
           filter[item1.key] = '';
@@ -122,26 +123,22 @@ class EditableTable extends React.Component {
           let a = this.state.filter;
           let b = this.state.option;
           console.log('item', item)
-          // a[item.needTime.key] == this.state.dateTime;
-          // b[item.needTime.key] = item.needTime.value;
           for (let key in a) {
             a[item.needTime.key] = this.state.dateTime;
             this.state.option[item.needTime.key] = item.needTime.value;
           }
-          // item.needTime.key
-          // item.needTime.value
           console.log('最终结果', a, b);
           //初始化的时候显示数
           options.filter = this.state.filter;
           options.option = this.state.option;
           let atime;
-          if (moren == '/registQuery' || moren == '/registEntrust') {
+          if (path == '/registQuery' || path == '/registEntrust') {
             if (this.state.nowWeek[0] != '') {
               atime = this.state.nowWeek[0] + '~' + this.state.nowWeek[1]
             } else {
               atime = " "
             }
-          } else if (moren == '/menberList') {
+          } else if (path == '/menberList') {
             atime = " "
           } else {
             if (this.state.nowWeek[0] != '') {
@@ -168,33 +165,10 @@ class EditableTable extends React.Component {
          * 是否结算yes_no_dict
          * 结算方式settle_type_dict
          * 买卖方向appoint_type_dict
+         * 类型hold_change_type_dict
          */
         let localData = JSON.parse(localStorage.getItem('localData'));
-        let fund_stream_type_dict = localData.fund_stream_type_dict;
-        let fund_stream_source_dict = localData.fund_stream_source_dict;
-        let yes_no_dict = localData.yes_no_dict;
-        let settle_type_dict = localData.settle_type_dict;
-        let appoint_type_dict = localData.appoint_type_dict;
-        let hold_change_type_dict = localData.hold_change_type_dict;
-        //操作类型，流水标的
-        c1 = fund_stream_type_dict.map((item, index) => (
-          <Option value={item.k}>{item.v}</Option>
-        ))
-        c2 = fund_stream_source_dict.map((item, index) => (
-          <Option value={item.k}>{item.v}</Option>
-        ))
-        //是否结算，结算方式
-        c3 = yes_no_dict.map((item, index) => (
-          <Option value={item.k}>{item.v}</Option>
-        ))
-        c4 = settle_type_dict.map((item, index) => (
-          <Option value={item.k}>{item.v}</Option>
-        ))
-        c5 = appoint_type_dict.map((item, index) => (
-          <Option value={item.k}>{item.v}</Option>
-        ))
-        //类型
-        c6 = hold_change_type_dict.map((item, index) => (
+        let [c1, c2, c3, c4, c5, c6] = Object.values(localData).map((item, index) => (
           <Option value={item.k}>{item.v}</Option>
         ))
         labelDom = item.filter.map((item1, index1) => (
@@ -275,18 +249,18 @@ class EditableTable extends React.Component {
       current: 1
     }, () => {
       let url, method, options;
-      let moren = this.props.match.path;
+      let path = this.props.match.path;
 
       MENU.map((item, index) => {
         //拿搜索框
-        if (moren === item.path) {
+        if (path === item.path) {
           url = item.url;
           if (item.path != '/index') {
             method = 'post'
           } else {
             method = 'get'
           }
-          if (moren == '/historyList') {
+          if (path == '/historyList') {
             options = {
               page: this.state.current,
               size: 16,
@@ -640,11 +614,9 @@ class EditableTable extends React.Component {
                 return item;
               })
               console.log('我是新数组', aL)
-              // let keya = Object.keys(aL[0])[0];
               this.setState({
                 allList: aL
               }, () => {
-                // AK = AK.push(this.state.allList[0])
                 this.setState({
                   rows: [...AK, this.state.allList[0]]
                 }, () => {
@@ -722,17 +694,17 @@ class EditableTable extends React.Component {
       current: page,
     }, () => {
       let url, method, options;
-      let moren = this.props.match.path;
+      let path = this.props.match.path;
       MENU.map((item, index) => {
         //拿搜索框
-        if (moren === item.path) {
+        if (path === item.path) {
           url = item.url;
           if (item.path != '/index') {
             method = 'post'
           } else {
             method = 'get'
           }
-          if (moren == '/historyList') {
+          if (path == '/historyList') {
             options = {
               page: this.state.current,
               size: 16,
@@ -773,18 +745,18 @@ class EditableTable extends React.Component {
     return currentdate;
   }
   onChangeTime = (value, dateString) => {
-    let moren = this.props.match.path;
+    let path = this.props.match.path;
     console.log('Selected Time: ', value);
     console.log('Formatted Selected Time: ', dateString);
     //历史成交查询,历史委托查询
     let atime;
-    if (moren == '/registQuery' || moren == '/registEntrust') {
+    if (path == '/registQuery' || path == '/registEntrust') {
       if (dateString[0] != '') {
         atime = dateString[0] + '~' + dateString[1]
       } else {
         atime = this.state.nowWeek[0] + '~' + this.state.nowWeek[1]
       }
-    } else if (moren == '/menberList') {
+    } else if (path == '/menberList') {
       if (dateString[0] != '') {
         atime = dateString[0] + ' 00:00' + '~' + dateString[1] + ' 23:59'
       } else {
