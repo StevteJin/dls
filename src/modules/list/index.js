@@ -29,8 +29,6 @@ class EditableTable extends React.Component {
     this.myRef = React.createRef();
     //数据字典
     this.columns = [];
-    //底部统计
-    this.columnv = [];
     this.state = {
       count: 1,
       data: "",
@@ -104,12 +102,11 @@ class EditableTable extends React.Component {
               atime = " "
             }
           }
-          var lastkey = "";
-          var jsonobj = this.state.filter;
-          for (var key in jsonobj) {
+          let lastkey = "";
+          let jsonobj = this.state.filter;
+          for (let key in jsonobj) {
             lastkey = key;
           }
-          console.log('我是', lastkey);
           this.state.filter[lastkey] = atime;
           this.getData(url, method, false, options);
         });
@@ -182,23 +179,23 @@ class EditableTable extends React.Component {
   //获取本周一和周日的时间
   getCurrentWeek() {
     //起止日期数组    
-    var startStop = new Array();
+    let startStop = new Array();
     //获取当前时间    
-    var currentDate = new Date();
+    let currentDate = new Date();
     //返回date是一周中的某一天    
-    var week = currentDate.getDay();
+    let week = currentDate.getDay();
     //返回date是一个月中的某一天    
-    var month = currentDate.getDate();
+    let month = currentDate.getDate();
 
     //一天的毫秒数    
-    var millisecond = 1000 * 60 * 60 * 24;
+    let millisecond = 1000 * 60 * 60 * 24;
     //减去的天数    
-    var minusDay = week != 0 ? week - 1 : 4;
+    let minusDay = week != 0 ? week - 1 : 4;
     //alert(minusDay);    
     //本周 周一    
-    var monday = new Date(currentDate.getTime() - (minusDay * millisecond));
+    let monday = new Date(currentDate.getTime() - (minusDay * millisecond));
     //本周 周日    
-    var sunday = new Date(monday.getTime() + (4 * millisecond));
+    let sunday = new Date(monday.getTime() + (4 * millisecond));
     monday = moment(monday).format('YYYY-MM-DD');
     sunday = moment(sunday).format('YYYY-MM-DD');
     //添加本周时间    
@@ -308,245 +305,12 @@ class EditableTable extends React.Component {
                         width: 120
                       })
                     }
-                    //佣金统计
-                    if (this.state.wherePath == '/commissionStatistics') {
-                      if (key == 'account_code') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 120,
-                          render: (text, record) => <span>统计</span>
-                        })
-                      } else if (key == 'create_time' || key == 'opeartor_time') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 250
-                        })
-                      } else if (key == 'remark') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 300
-                        })
-                      } else if (key == 'sub_trade_scale') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          ellipsis: true,
-                          align: 'center',
-                          width: 230
-                        })
-                      } else if (key == 'invite_code_desc') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          width: 200
-                        })
-                      } else {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 120
-                        })
-                      }
-                    }
-                    //成交信息
-                    if (this.state.wherePath == '/registQuery') {
-                      if (key == 'deal_date_desc') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 120,
-                          render: (text, record) => <span>统计</span>
-                        })
-                      } else if (key == 'create_time' || key == 'opeartor_time') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 250
-                        })
-                      } else if (key == 'remark') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 300
-                        })
-                      } else if (key == 'sub_trade_scale') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          ellipsis: true,
-                          align: 'center',
-                          width: 230
-                        })
-                      } else if (key == 'invite_code_desc') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          width: 200
-                        })
-                      } else {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 120
-                        })
-                      }
-                    }
-                    //委托信息
-                    if (this.state.wherePath == '/registEntrust') {
-                      if (key == 'order_date_desc') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 120,
-                          render: (text, record) => <span>统计</span>
-                        })
-                      } else if (key == 'create_time' || key == 'opeartor_time') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 250
-                        })
-                      } else if (key == 'remark') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 300
-                        })
-                      } else if (key == 'sub_trade_scale') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          ellipsis: true,
-                          align: 'center',
-                          width: 230
-                        })
-                      } else if (key == 'invite_code_desc') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          width: 200
-                        })
-                      } else {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 120
-                        })
-                      }
-                    }
-                    //结算信息
-                    if (this.state.wherePath == '/registSettlement') {
-                      if (key == 'account_code') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 120,
-                          render: (text, record) => <span>统计</span>
-                        })
-                      } else if (key == 'create_time' || key == 'opeartor_time') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 250
-                        })
-                      } else if (key == 'remark') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 300
-                        })
-                      } else if (key == 'sub_trade_scale') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          ellipsis: true,
-                          align: 'center',
-                          width: 230
-                        })
-                      } else if (key == 'invite_code_desc') {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          width: 200
-                        })
-                      } else {
-                        this.columnv.push({
-                          title: item1.name,
-                          dataIndex: item1.key,
-                          key: item1.key,
-                          align: 'center',
-                          ellipsis: true,
-                          width: 120
-                        })
-                      }
-                    }
                   }
                 })
               }
             }
           }
           this.columns = this.deteleObject(this.columns);
-          this.columnv = this.deteleObject(this.columnv);
         })
         this.setState({
           data: res.data,
@@ -631,15 +395,15 @@ class EditableTable extends React.Component {
   }
   //数组去重
   deteleObject(obj) {
-    var uniques = [];
-    var stringify = {};
-    for (var i = 0; i < obj.length; i++) {
-      var keys = Object.keys(obj[i]);
+    let uniques = [];
+    let stringify = {};
+    for (let i = 0; i < obj.length; i++) {
+      let keys = Object.keys(obj[i]);
       keys.sort(function (a, b) {
         return (Number(a) - Number(b));
       });
-      var str = '';
-      for (var j = 0; j < keys.length; j++) {
+      let str = '';
+      for (let j = 0; j < keys.length; j++) {
         str += JSON.stringify(keys[j]);
         str += JSON.stringify(obj[i][keys[j]]);
       }
@@ -696,9 +460,9 @@ class EditableTable extends React.Component {
       dateTime: atime
     }, () => {
       console.log('时间', this.state)
-      var lastkey = "";
-      var jsonobj = this.state.filter;
-      for (var key in jsonobj) {
+      let lastkey = "";
+      let jsonobj = this.state.filter;
+      for (let key in jsonobj) {
         lastkey = key;
       }
       console.log('我是', lastkey);
@@ -710,7 +474,6 @@ class EditableTable extends React.Component {
   render() {
     const { rows, localData, labelDom, wherePath, whereClass, total, nowWeek } = this.state;
     const columns = this.columns;
-    const columnv = this.columnv;
     const dateFormat = 'YYYY-MM-DD';
     const dateFormatList = ['YYYY-MM-DD', 'YYYY-MM-DD'];
     const a = moment(nowWeek[0]);
@@ -781,10 +544,6 @@ class EditableTable extends React.Component {
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
         </div>
         <div className="tableBox">
-          {/* {(wherePath == '/commissionStatistics' && rows.length > 0) || (wherePath == '/registQuery' && rows.length > 0) || (wherePath == '/registEntrust' && rows.length > 0) || (wherePath == '/registSettlement' && rows.length > 0) ?
-            <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 570 }} pagination={false} footer={() => {
-              return (wherePath != '/registEntrust' ? <Table showHeader={false} columns={columnv} size="small" dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} /> : <Table showHeader={false} scroll={{ y: 670 }} columns={columnv} size="small" dataSource={this.state.allList} rowKey={record => Math.random()} pagination={false} />)
-            }} /> : <Table dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />} */}
           <Table className={whereClass} dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />
           <div className="pagen">
             <Pagination size="small" current={this.state.current} defaultPageSize={16} onChange={this.onChange} total={total} />
