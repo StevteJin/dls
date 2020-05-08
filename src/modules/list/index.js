@@ -46,35 +46,19 @@ class EditableTable extends React.Component {
       dateTime: '',
       qrUrl: '',
       dictionary: '',
-      c1: [],
-      c2: [],
-      c3: [],
-      c4: [],
-      c5: [],
-      c6: [],
+      localData: '',
       nowWeek: "",
       extend: "",
       allList: [],
       whereClass: ""
     };
   }
-  //请求表格数据的操作
+
   componentDidMount = () => {
-    //这是用来获取本周一和周五日期的
+    let [url, method, options, labelDom, path, filter, option] = ['', '', '', '', this.props.match.path, {}, {}];
+    //nowWeek为本周一和周五,用whereClass区分各自结构的Class
     this.setState({
-      nowWeek: this.getCurrentWeek()
-    }, () => {
-      // console.log('我是周时间', this.state.nowWeek, typeof (this.state.nowWeek[0]));
-    })
-    //url为请求地址,method为请求方式，options为参数
-    let url, method, options;
-    //用来取当前路由的
-    let path = this.props.match.path;
-    //filter和option为请求列表的参数
-    let filter = {}, option = {};
-    let labelDom, c1, c2, c3, c4, c5, c6;
-    //用whereClass区分各自结构的Class
-    this.setState({
+      nowWeek: this.getCurrentWeek(),
       wherePath: path
     }, () => {
       this.setState({
@@ -82,34 +66,7 @@ class EditableTable extends React.Component {
       })
     })
     MENU.map((item, index) => {
-      //拿搜索框
-      if (path === item.path) {
-        console.log(111)
-        url = item.url;
-        if (item.path != '/index') {
-          method = 'post'
-        } else {
-          method = 'get'
-        }
-        if (path == '/historyList') {
-          options = {
-            page: this.state.current,
-            size: 16,
-            sort: 'subTradeScale',
-            order: 'desc',
-            filter: this.state.filter,
-            option: this.state.option
-          };
-        } else {
-          options = {
-            page: this.state.current,
-            size: 16,
-            filter: this.state.filter,
-            option: this.state.option
-          };
-        }
-      }
-
+      [url, method, options] = this.setSameOptions(path, item, url, method, options);
       if (path == item.path && item.key != 'needTime') {
         item.filter.map((item1, index1) => {
           filter[item1.key] = '';
@@ -156,9 +113,6 @@ class EditableTable extends React.Component {
           this.state.filter[lastkey] = atime;
           this.getData(url, method, false, options);
         });
-        console.log('filter啊1', this.state.filter)
-
-        //操作类型，流水标的，是否结算，结算方式，买卖方向
         /**
          * 操作类型：fund_stream_type_dict
          * 流水标的fund_stream_source_dict
@@ -168,9 +122,9 @@ class EditableTable extends React.Component {
          * 类型hold_change_type_dict
          */
         let localData = JSON.parse(localStorage.getItem('localData'));
-        let [c1, c2, c3, c4, c5, c6] = Object.values(localData).map((item, index) => (
-          <Option value={item.k}>{item.v}</Option>
-        ))
+        this.setState({
+          localData: localData
+        })
         labelDom = item.filter.map((item1, index1) => (
           item1.value != '操作类型' && item1.value != '流水标的' && item1.value != '是否结算' && item1.value != '结算方式' && item1.value != '买卖方向' ?
             <div key={index1} className='inputArray'>
@@ -182,17 +136,47 @@ class EditableTable extends React.Component {
       }
     })
     this.setState({
-      labelDom: labelDom,
-      c1: c1,
-      c2: c2,
-      c3: c3,
-      c4: c4,
-      c5: c5,
-      c6: c6
+      labelDom: labelDom
     });
   }
-  onOk(value) {
-    console.log('onOk: ', value);
+
+  //设置公共参数
+  setSameOptions(path, item, url, method, options) {
+    if (path === item.path) {
+      console.log(33333)
+      url = item.url;
+      if (item.path != '/index') {
+        method = 'post'
+      } else {
+        method = 'get'
+      }
+      if (path == '/historyList') {
+        options = {
+          page: this.state.current,
+          size: 16,
+          sort: 'subTradeScale',
+          order: 'desc',
+          filter: this.state.filter,
+          option: this.state.option
+        };
+      } else {
+        options = {
+          page: this.state.current,
+          size: 16,
+          filter: this.state.filter,
+          option: this.state.option
+        };
+      }
+    }
+    return [url, method, options];
+  }
+
+  //用来获取下拉选项
+  getDom(dom, key) {
+    const mainArray = dom[key];
+    return mainArray.map((item1, key1) => (
+      <Option value={item1.k}> {item1.v} </Option>
+    ))
   }
 
   //获取本周一和周日的时间
@@ -225,7 +209,7 @@ class EditableTable extends React.Component {
     //返回    
     return startStop;
   }
-
+  //监听搜索输入框改变
   handelChange = event => {
     let e = event.target;
     console.log('拿到的', e.id, e.value)
@@ -238,50 +222,26 @@ class EditableTable extends React.Component {
     }
     console.log('最后', this.state.filter);
   }
-
+  //监听下拉框改变
   handelChangeOther = (value, event, who) => {
     this.state.filter[who] = value;
     console.log('最后2', this.state.filter, '88', value, '99', event, 'who', who);
     this.state.option[who] = 'LIKE';
   }
+  //点击搜索
   searchNow() {
     this.setState({
       current: 1
     }, () => {
       let url, method, options;
       let path = this.props.match.path;
-
       MENU.map((item, index) => {
-        //拿搜索框
-        if (path === item.path) {
-          url = item.url;
-          if (item.path != '/index') {
-            method = 'post'
-          } else {
-            method = 'get'
-          }
-          if (path == '/historyList') {
-            options = {
-              page: this.state.current,
-              size: 16,
-              sort: 'subTradeScale',
-              order: 'desc',
-              filter: this.state.filter,
-              option: this.state.option
-            };
-          } else {
-            options = {
-              page: this.state.current,
-              size: 16,
-              filter: this.state.filter,
-              option: this.state.option
-            };
-          }
-        }
+        [url, method, options] = this.setSameOptions(path, item, url, method, options);
       })
       this.getData(url, method, false, options);
     });
   }
+  //请求列表数据
   getData(url, method, beel, options) {
     httpAxios(url, method, beel, options).then(res => {
       if (res.code === 0) {
@@ -650,6 +610,7 @@ class EditableTable extends React.Component {
       }
     })
   }
+  //显示二维码
   showImg(text, record) {
     console.log('对象', record);
     let index = this.state.rows.indexOf(record);
@@ -661,12 +622,14 @@ class EditableTable extends React.Component {
       this.myRef.current.style.top = (index / 20) * 90 + '%';
     });
   }
+  //隐藏二维码
   noShowImg() {
     this.setState({
       qrUrl: '',
     }, () => {
     });
   }
+  //数组去重
   deteleObject(obj) {
     var uniques = [];
     var stringify = {};
@@ -688,6 +651,7 @@ class EditableTable extends React.Component {
     uniques = uniques;
     return uniques;
   }
+  //分页改变
   onChange = page => {
     console.log(page);
     this.setState({
@@ -696,54 +660,12 @@ class EditableTable extends React.Component {
       let url, method, options;
       let path = this.props.match.path;
       MENU.map((item, index) => {
-        //拿搜索框
-        if (path === item.path) {
-          url = item.url;
-          if (item.path != '/index') {
-            method = 'post'
-          } else {
-            method = 'get'
-          }
-          if (path == '/historyList') {
-            options = {
-              page: this.state.current,
-              size: 16,
-              sort: 'subTradeScale',
-              order: 'desc',
-              filter: this.state.filter,
-              option: this.state.option
-            };
-          } else {
-            options = {
-              page: this.state.current,
-              size: 16,
-              filter: this.state.filter,
-              option: this.state.option
-            };
-          }
-        }
+        [url, method, options] = this.setSameOptions(path, item, url, method, options);
       })
       this.getData(url, method, false, options);
     });
   }
-  getNowFormatDate = () => {
-    var date = new Date();
-    var seperator1 = "-";
-    var seperator2 = ":";
-    var year = date.getFullYear();
-    var month = date.getMonth() + 1;
-    var strDate = date.getDate();
-    if (month >= 1 && month <= 9) {
-      month = "0" + month;
-    }
-    if (strDate >= 0 && strDate <= 9) {
-      strDate = "0" + strDate;
-    }
-    var currentdate = year + seperator1 + month + seperator1 + strDate;
-    // + " " + date.getHours() + seperator2 + date.getMinutes()
-    // + seperator2 + date.getSeconds();
-    return currentdate;
-  }
+  //时间改变
   onChangeTime = (value, dateString) => {
     let path = this.props.match.path;
     console.log('Selected Time: ', value);
@@ -786,9 +708,7 @@ class EditableTable extends React.Component {
   }
 
   render() {
-    // let todayDate = this.getNowFormatDate();
-    // console.log('我是当前日期', todayDate, typeof (todayDate))
-    const { rows, labelDom, c1, c2, c3, c4, c5, c6, wherePath, whereClass, total, nowWeek } = this.state;
+    const { rows, localData, labelDom, wherePath, whereClass, total, nowWeek } = this.state;
     const columns = this.columns;
     const columnv = this.columnv;
     const dateFormat = 'YYYY-MM-DD';
@@ -805,32 +725,32 @@ class EditableTable extends React.Component {
               <div className='inputArray'>
                 <label>操作类型 :</label>
                 <Select style={{ width: 150 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'type') }} allowClear={true}>
-                  {c1}
+                  {this.getDom(localData, 'fund_stream_type_dict')}
                 </Select>
               </div>
               <div className='inputArray'>
                 <label>流水标的 :</label>
                 <Select style={{ width: 120 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'source') }} allowClear={true}>
-                  {c2}
+                  {this.getDom(localData, 'fund_stream_source_dict')}
                 </Select>
               </div></div> : (wherePath == '/commissionStatistics' ? <div>
                 <div className='inputArray'>
                   <label>是否结算 :</label>
                   <Select style={{ width: 120 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'is_settled') }} allowClear={true}>
-                    {c3}
+                    {this.getDom(localData, 'yes_no_dict')}
                   </Select>
                 </div>
                 <div className='inputArray'>
                   <label>结算方式 :</label>
                   <Select style={{ width: 140 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'settle_type') }} allowClear={true}>
-                    {c4}
+                    {this.getDom(localData, 'settle_type_dict')}
                   </Select>
                 </div></div> : (wherePath == '/changeRecord' ?
                   <div>
                     <div className='inputArray'>
                       <label>类型 :</label>
                       <Select style={{ width: 150 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'type') }} allowClear={true}>
-                        {c6}
+                        {this.getDom(localData, 'hold_change_type_dict')}
                       </Select>
                     </div>
                   </div> : (wherePath == '/registEntrust' ?
@@ -838,7 +758,7 @@ class EditableTable extends React.Component {
                       <div className='inputArray'>
                         <label>买卖方向 :</label>
                         <Select style={{ width: 120 }} className='searchSelect' onChange={(value, event) => { this.handelChangeOther(value, event, 'subType') }} allowClear={true}>
-                          {c5}
+                          {this.getDom(localData, 'appoint_type_dict')}
                         </Select>
                       </div>
                     </div> : '')))}
@@ -847,13 +767,11 @@ class EditableTable extends React.Component {
             {
               wherePath != '/menberList' ? <RangePicker
                 onChange={this.onChangeTime}
-                onOk={this.onOk}
                 locale={locale}
                 className='dateStyle'
                 placeholder={[this.state.nowWeek[0], this.state.nowWeek[1]]}
               /> : <RangePicker
                   onChange={this.onChangeTime}
-                  onOk={this.onOk}
                   locale={locale}
                   className='dateStyle'
                 />
