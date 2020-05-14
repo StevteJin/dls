@@ -4,10 +4,10 @@ import { ORIGIN } from '../constants/index'
 // 添加一个请求拦截器
 axios.interceptors.request.use(config => {
   //如果存在token,请求头里面设置
-  var token =  localStorage.getItem("token")||'';
-  console.log('我是token',token)
+  var token = localStorage.getItem("token") || '';
+  console.log('我是token', token)
   if (token) {
-      config.headers.Authorization = token;
+    config.headers.Authorization = token;
   }
   return config;
 }, error => {
@@ -20,15 +20,15 @@ axios.interceptors.response.use(response => {
 }, error => {
   console.log(error.response)
   if (error.response.status === 401) {
-    window.location.pathname = '/login'
+    localStorage.clear();
   }
   // ......在做别的统一处理
   return Promise.reject(error);
 });
 
-export default function request(url,method,withCredentials, options ) {
+export default function request(url, method, withCredentials, options) {
   return axios({
-    url: `${ORIGIN}`+url,
+    url: `${ORIGIN}` + url,
     method: method,
     // 携带cookie信息
     withCredentials: withCredentials,

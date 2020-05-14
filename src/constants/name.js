@@ -28,19 +28,14 @@ const name =
     //资金流水
     { key: 'account_code', name: '会员ID' },
     { key: 'amount', name: '金额(元)' },
-    // { key: 'type', name: '操作类型' },
-    // { key: 'source', name: '流水标的' },
     { key: 'type_desc', name: '类型' },
     { key: 'source_desc', name: '标的' },
     { key: 'remark', name: '备注' },
     { key: 'opeartor', name: '操作人' },
     { key: 'opeartorTime', name: '操作时间' },
     //佣金统计
-    // { key: 'deal_date', name: '交易日期' },
     { key: 'deal_cnt', name: '成交数量' },
     { key: 'commission', name: '佣金总和' },
-    // { key: 'is_settled', name: '是否结算' },
-    // { key: 'settle_type', name: '结算方式' },
     { key: 'is_settled_desc', name: '是否结算' },
     { key: 'settle_type_desc', name: '结算方式' },
     { key: 'settle_time', name: '结算时间' },
@@ -58,10 +53,8 @@ const name =
     //持仓变更记录
     { key: 'stock_code', name: '证券代码' },
     { key: 'stock_name', name: '证券名称' },
-    // { key: 'stock_name', name: '证券名称' },
     //历史交割单
     { key: 'stock_no', name: '证券代码' },
-    // { key: 'bs_type', name: '买卖方向' },
     { key: 'order_no', name: '委托编号' },
     { key: 'entrust_price', name: '委托价' },
     { key: 'stock_cnt', name: '委托数量' },
@@ -79,18 +72,12 @@ const name =
     { key: 'bs_type_desc', name: '买卖方向' },
     //历史成交查询
     { key: 'pk_order', name: '委托PK' },
-    // { key: 'order_date', name: '交易日期' },
-    // { key: 'msg_time', name: '委托时间' },
     { key: 'deal_avr_price', name: '成交均价' },
     { key: 'fee_amount', name: '手续费' },
     { key: 'happen_amount', name: '发生金额' },
-    // { key: 'sub_type', name: '买卖类型' },
-    // { key: 'entrust_status', name: '委托状态' },
     { key: 'memo', name: '备注信息' },
     { key: 'sub_type_desc', name: '买卖方向' },
     { key: 'entrust_status_desc', name: '委托状态' },
-    // { key: 'order_date_desc', name: '交易日期' },
-    // { key: 'order_time_desc', name: '订单时间' },
     //历史委托查询
     //历史结算信息
     { key: 'deal_cnt_buy', name: '总买入数量' },
@@ -111,8 +98,10 @@ const name =
     { key: 'deal_date_desc', name: '成交日期' },
     { key: 'deal_time_desc', name: '成交时间' },
     { key: 'order_date_desc', name: '委托日期' },
-    { key: 'order_time_desc', name: ' 委托时间' },
+    { key: 'order_time_desc', name: ' 委托时间' }, 
     { key: 'amount_number', name: ' 数量' },
-
+    //会员直推统计
+    { key: 'invite_count', name: '直推会员数' },
+    { key: 'total_deal_cnt', name: '成交数量' }
     ]
 export const NAME = name;

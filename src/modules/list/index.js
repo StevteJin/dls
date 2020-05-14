@@ -320,7 +320,7 @@ class EditableTable extends React.Component {
           extend: res.data.extend || null,
           count: parseInt(this.total / 20)
         }, () => {
-          if (this.state.wherePath == '/commissionStatistics' || this.state.wherePath == '/registQuery' || this.state.wherePath == '/registEntrust' || this.state.wherePath == '/registSettlement') {
+          if (this.state.wherePath == '/commissionStatistics' || this.state.wherePath == '/registQuery' || this.state.wherePath == '/registEntrust' || this.state.wherePath == '/registSettlement' || this.state.wherePath == '/orderSttleInvite') {
             if (this.state.rows.length > 0) {
               //把数据push进去
               let AK = this.state.rows;
@@ -361,6 +361,10 @@ class EditableTable extends React.Component {
                     }
                     //结算信息
                     if (this.state.wherePath == '/registSettlement') {
+                      this.state.rows[aLength.length - 1]['account_code'] = '统计'
+                    }
+                    //结算信息
+                    if (this.state.wherePath == '/orderSttleInvite') {
                       this.state.rows[aLength.length - 1]['account_code'] = '统计'
                     }
                   }

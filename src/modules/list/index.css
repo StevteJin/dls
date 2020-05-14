@@ -167,3 +167,12 @@
 .registSettlement .ant-table tbody>tr.ant-table-row:last-child:hover>td {
     background: #65666b;
 }
+
+.orderSttleInvite .ant-table-row:last-child {
+    background-color: #65666b;
+    color: #fff;
+}
+
+.orderSttleInvite .ant-table tbody>tr.ant-table-row:last-child:hover>td {
+    background: #65666b;
+}

@@ -73,5 +73,12 @@ const menu = [{
     name: '历史持仓快照',
     filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }],
     needTime: { key: 'createTime', value: 'RANGE' }
+}, {
+    path: '/orderSttleInvite',
+    key: 'orderSttleInvite',
+    url: '/api.v1/stock/order/settle/invite',
+    name: '会员直推统计',
+    filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }],
+    needTime: { key: 'createTime', value: 'RANGE' }
 }];
 export const MENU = menu;

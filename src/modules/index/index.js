@@ -2,6 +2,7 @@
 import React from 'react';
 //二维码
 import QRCode from 'qrcode.react';
+import httpAxios from '../../helpers/request';
 //导航
 import { MENU } from '../../constants/menudata'
 //图
@@ -66,8 +67,10 @@ class MainContent extends React.Component {
         };
     }
     loginOut() {
-        localStorage.clear();
-        this.props.history.push('/login')
+        httpAxios('/logout', 'post', false, null).then(res => {
+            localStorage.clear();
+            this.props.history.push('/login')
+        })
     }
     render() {
         let menuData = MENU;
