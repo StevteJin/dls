@@ -6,6 +6,7 @@ const name =
     { key: 'parent_account_code', name: '推荐人ID' },
     { key: 'parent_account_name', name: '推荐人名称' },
     { key: 'invite_code_desc', name: '邀请码' },
+    { key: 'referral_code_desc', name: '推广码' },
     { key: 'finance_period_desc', name: '融资周期' },
     { key: 'finance_ratio', name: '融资比例' },
     { key: 'manage_fee_rate', name: '管理费率' },
@@ -46,8 +47,8 @@ const name =
     { key: 'total_scale', name: '总资产' },
     { key: 'able_scale', name: '可用资金' },
     { key: 'stock_scale', name: '股票市值' },
-    { key: 'self_trade_scale', name: '当日交易市值' },
-    { key: 'sub_trade_scale', name: '当日子账户交易市值' },
+    { key: 'self_trade_scale', name: '当日交易成交总额' },
+    { key: 'sub_trade_scale', name: '当日子账户交易成交总额' },
     { key: 'change_scale', name: '当日权益变动价' },
     { key: 'total_profit', name: '总盈亏' },
     //持仓变更记录

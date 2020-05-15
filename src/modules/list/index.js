@@ -275,16 +275,45 @@ class EditableTable extends React.Component {
                         align: 'center',
                         width: 230
                       })
+                    } else if (key == 'self_trade_scale') {
+                      this.columns.push({
+                        title: item1.name,
+                        dataIndex: item1.key,
+                        key: item1.key,
+                        ellipsis: true,
+                        align: 'center',
+                        width: 140
+                      })
                     } else if (key == 'invite_code_desc') {
                       this.columns.push({
                         title: item1.name,
                         dataIndex: item1.key,
                         key: item1.key,
                         align: 'center',
-                        width: 200,
+                        width: 80,
                         render: (text, record) => (
                           <div className='ermax'>{text != '' ? <img className='curimg' onClick={() => this.showImg(text, record)} src={erimg} /> : '-'}{this.state.qrUrl && text == this.state.qrUrl ?
                             <div className='ercode1' onClick={() => this.noShowImg()}>
+                              <div className='erimg1' ref={this.myRef}>
+                                <QRCode
+                                  value={this.state.qrUrl}
+                                  size={160}
+                                  fgColor="#000000"
+                                />
+                              </div>
+                            </div> : ''}</div>
+                        )
+                      })
+                    } else if (key == 'referral_code_desc') {
+                      this.columns.push({
+                        title: item1.name,
+                        dataIndex: item1.key,
+                        key: item1.key,
+                        align: 'center',
+                        width: 80,
+                        render: (text, record) => (
+                          <div className='ermax'>{text != '' ? <img className='curimg' onClick={() => this.showImg1(text, record)} src={erimg} /> : '-'}{this.state.qrUrl1 && text == this.state.qrUrl1 ?
+                            <div className='ercode1' onClick={() => this.noShowImg1()}>
                               <div className='erimg1' ref={this.myRef}>
                                 <QRCode
                                   value={this.state.qrUrl}
@@ -390,10 +419,27 @@ class EditableTable extends React.Component {
       this.myRef.current.style.top = (index / 20) * 90 + '%';
     });
   }
+  showImg1(text, record) {
+    console.log('对象', record);
+    let index = this.state.rows.indexOf(record);
+    console.log('第几项', index);
+    let url = record.referral_code_desc;
+    this.setState({
+      qrUrl1: url,
+    }, () => {
+      this.myRef.current.style.top = (index / 20) * 90 + '%';
+    });
+  }
   //隐藏二维码
   noShowImg() {
     this.setState({
       qrUrl: '',
+    }, () => {
+    });
+  }
+  noShowImg1() {
+    this.setState({
+      qrUrl1: '',
     }, () => {
     });
   }

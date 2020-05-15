@@ -67,6 +67,7 @@ class login extends React.Component {
                         //这里拿到的username要发出订阅出去，redux订阅
                         localStorage.setItem('username', data.account_name);
                         localStorage.setItem('invite_code_desc', data.invite_code_desc);
+                        localStorage.setItem('referral_code_desc', data.referral_code_desc);
                     }
                 });
             } else {

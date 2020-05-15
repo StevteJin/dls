@@ -31,7 +31,8 @@ class MainContent extends React.Component {
             theme: "dark",
             current: "",
             username: '',
-            qrUrl: ''
+            qrUrl: '',
+            qrUrl1: ''
         }
     }
     // componentWillMount()一般用的比较少，它更多的是在服务端渲染时使用。它代表的过程是组件已经经历了constructor()初始化数据后，但是还未渲染DOM时。
@@ -52,9 +53,11 @@ class MainContent extends React.Component {
             });
         })
         let invite_code_desc = localStorage.getItem('invite_code_desc');
+        let referral_code_desc = localStorage.getItem('referral_code_desc');
         let username = localStorage.getItem('username');
         this.setState({
             qrUrl: invite_code_desc,
+            qrUrl1: referral_code_desc,
             username: username
         }, () => {
             console.log('图啊', this.state.username, this.state.invite_code_desc)
@@ -115,8 +118,17 @@ class MainContent extends React.Component {
                                 {menuDom}
                             </Menu>
                         </div>
-                        {this.state.qrUrl ?
+                        {this.state.qrUrl1 ?
                             <div className='ercode'>
+                                <div className='ertitle'>我的推广码</div>
+                                <div className='erimg'>
+                                    <QRCode
+                                        value={this.state.qrUrl1}
+                                        size={110}
+                                        fgColor="#000000"
+                                    />
+                                </div>
+                            </div> : <div className='ercode'>
                                 <div className='ertitle'>我的邀请码</div>
                                 <div className='erimg'>
                                     <QRCode
@@ -125,7 +137,7 @@ class MainContent extends React.Component {
                                         fgColor="#000000"
                                     />
                                 </div>
-                            </div> : ''}
+                            </div>}
                     </Sider>
                     <Layout>
                         <Content
