@@ -3,7 +3,7 @@ import React from 'react';
 import { Table, Pagination, Input, Button, DatePicker, Select, Tooltip, Popover } from 'antd';
 //二维码
 import QRCode from 'qrcode.react';
-
+import axios from 'axios'
 //引入导航
 import { MENU } from '../../constants/menudata';
 //引入数据字典
@@ -237,6 +237,54 @@ class EditableTable extends React.Component {
       })
       this.getData(url, method, false, options);
     });
+  }
+  //导出
+  exportExcel() {
+    let excelUrl, excelName;
+    if (this.state.wherePath == '/moneyWater') {
+      //资金流水
+      excelUrl = 'http://47.102.151.13:8199/api.v1/fund/stream/export';
+      excelName = '资金流水.xls';
+    } else if (this.state.wherePath == '/registQuery') {
+      //成交信息
+      excelUrl = 'http://47.102.151.13:8199/api.v1/stock/order/history/deal/export';
+      excelName = '成交信息.xls';
+    } else if (this.state.wherePath == '/registEntrust') {
+      //委托信息
+      excelUrl = 'http://47.102.151.13:8199/api.v1/stock/order/history/entrust/export';
+      excelName = '委托信息.xls';
+    }
+    let method = 'post';
+    let beel = false;
+    let options = {
+      page: this.state.current,
+      size: 16,
+      filter: this.state.filter,
+      option: this.state.option
+    };
+    axios({ // 用axios发送post请求
+      method: method,
+      url: excelUrl, // 请求地址
+      data: options, // 参数
+      responseType: 'blob' // 表明返回服务器返回的数据类型
+    })
+      .then((res) => { // 处理返回的文件流
+        const content = res
+        const blob = new Blob([content])
+        const fileName = excelName
+        if ('download' in document.createElement('a')) { // 非IE下载
+          const elink = document.createElement('a')
+          elink.download = fileName
+          elink.style.display = 'none'
+          elink.href = URL.createObjectURL(blob)
+          document.body.appendChild(elink)
+          elink.click()
+          URL.revokeObjectURL(elink.href) // 释放URL 对象
+          document.body.removeChild(elink)
+        } else { // IE10+下载
+          navigator.msSaveBlob(blob, fileName)
+        }
+      })
   }
   //请求列表数据
   getData(url, method, beel, options) {
@@ -592,6 +640,9 @@ class EditableTable extends React.Component {
 
           </div>
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
+          {
+            wherePath == '/moneyWater' || wherePath == '/registQuery' || wherePath == '/registEntrust' ? <Button className="searchBtn" type="primary" onClick={() => this.exportExcel()}>导出</Button> : ''
+          }
         </div>
         <div className="tableBox">
           <Table className={whereClass} dataSource={rows} columns={columns} size="small" scroll={{ y: 670 }} pagination={false} />
