@@ -1,6 +1,6 @@
 //此为列表页
 import React from 'react';
-import { Table, Pagination, Input, Button, DatePicker, Select, Tooltip, Popover } from 'antd';
+import { Table, Pagination, Modal, Input, Button, DatePicker, Select, Tooltip, Popover } from 'antd';
 //二维码
 import QRCode from 'qrcode.react';
 import axios from 'axios'
@@ -48,7 +48,13 @@ class EditableTable extends React.Component {
       nowWeek: "",
       extend: "",
       allList: [],
-      whereClass: ""
+      whereClass: "",
+      selectList: [],
+      selectDom: "",
+      fromOne: "",
+      toOne: "",
+      visible: false,
+      reallyShow: false
     };
   }
 
@@ -93,7 +99,7 @@ class EditableTable extends React.Component {
             } else {
               atime = " "
             }
-          } else if (path == '/menberList') {
+          } else if (path == '/menberList' || path == '/inviteList') {
             atime = " "
           } else {
             if (this.state.nowWeek[0] != '') {
@@ -285,6 +291,95 @@ class EditableTable extends React.Component {
           navigator.msSaveBlob(blob, fileName)
         }
       })
+  }
+  getAccountList() {
+    let url = '/api.v1/user/options';
+    let method = 'get';
+    let beel = false;
+    let options = null;
+    httpAxios(url, method, beel, options).then(res => {
+      this.setState({
+        selectList: res.data
+      }, () => {
+        let selectDom = this.state.selectList.map((item, index) => (
+          <Option value={item.v}>{item.k}</Option>
+        ))
+        this.setState({
+          selectDom: selectDom
+        })
+      })
+    })
+  }
+  selectChange(selectedOption) {
+    if (!selectedOption) {
+      selectedOption = ''
+    }
+    console.log('没值', selectedOption)
+    this.setState({
+      fromOne: selectedOption
+    }, () => {
+      console.log('选择后', this.state.fromOne)
+    })
+  }
+  selectChange1(selectedOption) {
+    if (!selectedOption) {
+      selectedOption = ''
+    }
+    this.setState({
+      toOne: selectedOption
+    })
+  }
+  addNewNow() {
+    this.getAccountList();
+    this.setState({
+      reallyShow: true
+    })
+  }
+  handleOk = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+
+  handleCancel = e => {
+    console.log(e);
+    this.setState({
+      visible: false,
+    });
+  };
+  addNewPerson() {
+    if (this.state.fromOne == this.state.toOne) {
+      this.setState({
+        visible: true,
+        msg: '推荐人和被推荐人不能一样'
+      }, () => {
+        console.log('666', this.state.msg)
+      });
+    } else {
+      let url = '/api.v1/user/invite/add';
+      let method = 'post';
+      let beel = false;
+      let options = {
+        from: this.state.fromOne,
+        to: this.state.toOne
+      };
+      httpAxios(url, method, beel, options).then(res => {
+        if (res.code === 0) {
+          this.setState({
+            reallyShow: false
+          })
+          this.searchNow();
+        } else {
+          this.setState({
+            visible: true,
+            msg: res.msg
+          }, () => {
+            console.log('666', this.state.msg)
+          });
+        }
+      })
+    }
   }
   //请求列表数据
   getData(url, method, beel, options) {
@@ -546,6 +641,8 @@ class EditableTable extends React.Component {
       } else {
         atime = ""
       }
+    } else if (path == '/inviteList') {
+      atime = ""
     } else {
       if (dateString[0] != '') {
         atime = dateString[0] + ' 00:00' + '~' + dateString[1] + ' 23:59'
@@ -570,7 +667,7 @@ class EditableTable extends React.Component {
   }
 
   render() {
-    const { rows, localData, labelDom, wherePath, whereClass, total, nowWeek } = this.state;
+    const { rows, localData, labelDom, wherePath, whereClass, total, nowWeek, selectList, selectDom, reallyShow } = this.state;
     const columns = this.columns;
     const dateFormat = 'YYYY-MM-DD';
     const dateFormatList = ['YYYY-MM-DD', 'YYYY-MM-DD'];
@@ -579,6 +676,16 @@ class EditableTable extends React.Component {
     console.log('拿到的周值啊', nowWeek, a, b, typeof (a));
     return (
       <div>
+        <Modal
+          title="提示"
+          visible={this.state.visible}
+          onOk={this.handleOk}
+          onCancel={this.handleCancel}
+          okText="确定"
+          cancelText="取消"
+        >
+          <p>{this.state.msg}</p>
+        </Modal>
         <div className="searchBox">
           {labelDom}
           {wherePath == '/moneyWater' ?
@@ -623,25 +730,49 @@ class EditableTable extends React.Component {
                         </Select>
                       </div>
                     </div> : '')))}
-          <div className='inputArray'>
-            <label>日期 :</label>
-            {
-              wherePath != '/menberList' ? <RangePicker
-                onChange={this.onChangeTime}
-                locale={locale}
-                className='dateStyle'
-                placeholder={[this.state.nowWeek[0], this.state.nowWeek[1]]}
-              /> : <RangePicker
+          {wherePath != '/inviteList' ?
+            <div className='inputArray'>
+              <label>日期 :</label>
+              {
+                wherePath != '/menberList' ? <RangePicker
                   onChange={this.onChangeTime}
                   locale={locale}
                   className='dateStyle'
-                />
-            }
+                  placeholder={[this.state.nowWeek[0], this.state.nowWeek[1]]}
+                /> : <RangePicker
+                    onChange={this.onChangeTime}
+                    locale={locale}
+                    className='dateStyle'
+                  />
+              }
 
-          </div>
+            </div> : ''}
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
           {
             wherePath == '/moneyWater' || wherePath == '/registQuery' || wherePath == '/registEntrust' ? <Button className="searchBtn" type="primary" onClick={() => this.exportExcel()}>导出</Button> : ''
+          }
+          {
+            wherePath == '/inviteList' ? <Button className="searchBtn" type="primary" onClick={() => this.addNewNow()}>新增</Button> : ''
+          }
+          {
+            wherePath == '/inviteList' && reallyShow == true ?
+              <div className='bigSelectBox'>
+                <div className="selectBox">
+                  <div className="tuijian">
+                    <label>推荐人 : </label>
+                    <Select style={{ width: 200 }} onChange={(e) => this.selectChange(e)} allowClear>
+                      {selectDom}
+                    </Select>
+                  </div>
+                  <div className="tuijian">
+                    <label>被推荐人 : </label>
+                    <Select style={{ width: 200 }} onChange={(e) => this.selectChange1(e)} allowClear>
+                      {selectDom}
+                    </Select>
+                  </div>
+                  <Button className="addBtn" type="primary" onClick={() => this.addNewPerson()}>确定</Button>
+                </div>
+              </div> : ''
           }
         </div>
         <div className="tableBox">

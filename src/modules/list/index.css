@@ -176,3 +176,39 @@
 .orderSttleInvite .ant-table tbody>tr.ant-table-row:last-child:hover>td {
     background: #65666b;
 }
+
+.bigSelectBox {
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 100;
+}
+
+.selectBox {
+    width: 400px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 50px;
+    position: absolute;
+    left: 50%;
+    top: 100px;
+    transform: translate(-50%, 0px);
+    background-color: #fff;
+    z-index: 101;
+}
+
+.selectBox .tuijian {
+    margin-bottom: 20px;
+}
+
+.selectBox .tuijian label {
+    width: 100px;
+    display: inline-block;
+}
+
+.selectBox .addBtn {
+    width: 300px;
+}

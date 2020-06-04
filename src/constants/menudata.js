@@ -80,5 +80,12 @@ const menu = [{
     name: '会员直推统计',
     filter: [{ key: 'accountCode', value: '会员ID', type: 'LIKE' }, { key: 'accountName', value: '会员名称', type: 'LIKE' }],
     needTime: { key: 'createTime', value: 'RANGE' }
+}, {
+    path: '/inviteList',
+    key: 'inviteList',
+    url: '/api.v1/user/invite/list',
+    name: '会员直推关系',
+    filter: [{ key: 'from_user', value: '推荐人ID', type: 'LIKE' }, { key: 'from_user_name', value: '推荐人名称', type: 'LIKE' }],
+    needTime: { key: 'createTime', value: 'RANGE' }
 }];
 export const MENU = menu;

@@ -99,10 +99,15 @@ const name =
     { key: 'deal_date_desc', name: '成交日期' },
     { key: 'deal_time_desc', name: '成交时间' },
     { key: 'order_date_desc', name: '委托日期' },
-    { key: 'order_time_desc', name: ' 委托时间' }, 
+    { key: 'order_time_desc', name: ' 委托时间' },
     { key: 'amount_number', name: ' 数量' },
     //会员直推统计
     { key: 'invite_count', name: '直推会员数' },
-    { key: 'total_deal_cnt', name: '成交数量' }
+    { key: 'total_deal_cnt', name: '成交数量' },
+
+    { key: 'from_user', name: '推荐人ID' },
+    { key: 'from_user_name', name: '推荐人名称' },
+    { key: 'to_user', name: '被推荐人ID' },
+    { key: 'to_user_name', name: '被推荐人名称' },
     ]
 export const NAME = name;
