@@ -335,6 +335,11 @@ class EditableTable extends React.Component {
       reallyShow: true
     })
   }
+  noShowReal() {
+    this.setState({
+      reallyShow: false
+    })
+  }
   handleOk = e => {
     console.log(e);
     this.setState({
@@ -758,6 +763,7 @@ class EditableTable extends React.Component {
             wherePath == '/inviteList' && reallyShow == true ?
               <div className='bigSelectBox'>
                 <div className="selectBox">
+                  <div className="closeNow" onClick={() => this.noShowReal()}>X</div>
                   <div className="tuijian">
                     <label>推荐人 : </label>
                     <Select style={{ width: 200 }} onChange={(e) => this.selectChange(e)} allowClear>

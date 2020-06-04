@@ -117,17 +117,17 @@ class login extends React.Component {
                     <div className="leftLogin">
                         <div className="topLogin">
                             <div className="t1">
-                                <span>掌上仁信</span>&nbsp;
+                                <span>代理商系统</span>&nbsp;
                                 <img src={m2} alt="" />
                             </div>
-                            <div className="t2">后台查询系统</div>
-                            <img className="t3" src={m3} alt="" />
+                            <div className="t2">科技改变金融</div>
+                            {/* <img className="t3" src={m3} alt="" /> */}
                         </div>
                         <div className="bottomLogin">
-                            <div className="b1">
+                            {/* <div className="b1">
                                 <img src={m4} alt="" />
                                 <span>仁信</span>
-                            </div>
+                            </div> */}
                             <div className="loading">
                                 {this.state.loadingTime == 10 ? <div>Not logged in</div> :
                                     <div>Loading is running in the background...</div>}

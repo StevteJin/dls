@@ -16,22 +16,21 @@
 }
 
 .topLogin {
-    width: 369px;
     height: 546px;
     margin-left: 10px;
-    margin-top: 10px;
+    margin-top: 50px;
     overflow: hidden;
     background-image: url(./img/m1.png);
     background-repeat: no-repeat;
     background-size: 369px 546px;
-    background-position: -112px -40px;
+    background-position: 0px 0px;
 }
 
 .topLogin .t1 {
-    font-size: 56px;
+    font-size: 46px;
     color: #5473FF;
     font-weight: bold;
-    margin-left: 42px;
+    margin-left: 102px;
     margin-top: 56px;
 }
 
@@ -43,9 +42,8 @@
 
 .topLogin .t2 {
     color: #fff;
-    font-size: 38px;
-    margin-left: 42px;
-    margin-top: -20px;
+    font-size: 30px;
+    margin-left: 102px;
 }
 
 .topLogin .t3 {
@@ -97,7 +95,7 @@
     font-weight: bold;
     color: #333333;
     margin-left: 57px;
-    margin-top: 37px;
+    margin-top: 67px;
 }
 
 .loginbox .in1 {
