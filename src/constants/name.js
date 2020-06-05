@@ -107,7 +107,7 @@ const name =
 
     { key: 'from_user', name: '推荐人ID' },
     { key: 'from_user_name', name: '推荐人名称' },
-    { key: 'to_user', name: '被推荐人ID' },
-    { key: 'to_user_name', name: '被推荐人名称' },
+    { key: 'to_user', name: '客户ID' },
+    { key: 'to_user_name', name: '客户名称' },
     ]
 export const NAME = name;

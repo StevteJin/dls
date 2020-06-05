@@ -54,7 +54,8 @@ class EditableTable extends React.Component {
       fromOne: "",
       toOne: "",
       visible: false,
-      reallyShow: false
+      reallyShow: false,
+      isEdit: false
     };
   }
 
@@ -249,15 +250,15 @@ class EditableTable extends React.Component {
     let excelUrl, excelName;
     if (this.state.wherePath == '/moneyWater') {
       //资金流水
-      excelUrl = 'http://47.102.151.13:8199/api.v1/fund/stream/export';
+      excelUrl = 'http://106.14.120.212:8199/api.v1/fund/stream/export';
       excelName = '资金流水.xls';
     } else if (this.state.wherePath == '/registQuery') {
       //成交信息
-      excelUrl = 'http://47.102.151.13:8199/api.v1/stock/order/history/deal/export';
+      excelUrl = 'http://106.14.120.212:8199/api.v1/stock/order/history/deal/export';
       excelName = '成交信息.xls';
     } else if (this.state.wherePath == '/registEntrust') {
       //委托信息
-      excelUrl = 'http://47.102.151.13:8199/api.v1/stock/order/history/entrust/export';
+      excelUrl = 'http://106.14.120.212:8199/api.v1/stock/order/history/entrust/export';
       excelName = '委托信息.xls';
     }
     let method = 'post';
@@ -332,7 +333,10 @@ class EditableTable extends React.Component {
   addNewNow() {
     this.getAccountList();
     this.setState({
-      reallyShow: true
+      reallyShow: true,
+      fromOne: "",
+      toOne: "",
+      isEdit: false
     })
   }
   noShowReal() {
@@ -357,7 +361,7 @@ class EditableTable extends React.Component {
     if (this.state.fromOne == this.state.toOne) {
       this.setState({
         visible: true,
-        msg: '推荐人和被推荐人不能一样'
+        msg: '推荐人和客户不能一样'
       }, () => {
         console.log('666', this.state.msg)
       });
@@ -464,7 +468,7 @@ class EditableTable extends React.Component {
                             <div className='ercode1' onClick={() => this.noShowImg1()}>
                               <div className='erimg1' ref={this.myRef}>
                                 <QRCode
-                                  value={this.state.qrUrl}
+                                  value={this.state.qrUrl1}
                                   size={160}
                                   fgColor="#000000"
                                 />
@@ -486,6 +490,18 @@ class EditableTable extends React.Component {
                 })
               }
             }
+          }
+          if (this.state.wherePath == '/inviteList') {
+            this.columns.push({
+              title: '操作',
+              key: 'operation',
+              align: 'center',
+              ellipsis: true,
+              width: 120,
+              dataIndex: 'operation',
+              render: (text, record) =>
+                <a onClick={() => this.changeLast(text, record)}>修改</a>
+            })
           }
           this.columns = this.deteleObject(this.columns);
         })
@@ -555,6 +571,15 @@ class EditableTable extends React.Component {
       }
     })
   }
+  changeLast(text, record) {
+    console.log('修改', text, record, record.from_user)
+    this.setState({
+      reallyShow: true,
+      fromOne: record.from_user,
+      toOne: record.to_user,
+      isEdit: true
+    })
+  }
   //显示二维码
   showImg(text, record) {
     console.log('对象', record);
@@ -575,6 +600,7 @@ class EditableTable extends React.Component {
     this.setState({
       qrUrl1: url,
     }, () => {
+      console.log('地址',this.state.qrUrl1)
       this.myRef.current.style.top = (index / 20) * 90 + '%';
     });
   }
@@ -672,7 +698,7 @@ class EditableTable extends React.Component {
   }
 
   render() {
-    const { rows, localData, labelDom, wherePath, whereClass, total, nowWeek, selectList, selectDom, reallyShow } = this.state;
+    const { rows, localData, labelDom, wherePath, whereClass, total, nowWeek, selectList, selectDom, reallyShow, isEdit, fromOne, toOne } = this.state;
     const columns = this.columns;
     const dateFormat = 'YYYY-MM-DD';
     const dateFormatList = ['YYYY-MM-DD', 'YYYY-MM-DD'];
@@ -765,14 +791,14 @@ class EditableTable extends React.Component {
                 <div className="selectBox">
                   <div className="closeNow" onClick={() => this.noShowReal()}>X</div>
                   <div className="tuijian">
-                    <label>推荐人 : </label>
-                    <Select style={{ width: 200 }} onChange={(e) => this.selectChange(e)} allowClear>
+                    <label>客户 : </label>
+                    <Select style={{ width: 200 }} onChange={(e) => this.selectChange1(e)} defaultValue={toOne} disabled={isEdit == true} allowClear>
                       {selectDom}
                     </Select>
                   </div>
                   <div className="tuijian">
-                    <label>被推荐人 : </label>
-                    <Select style={{ width: 200 }} onChange={(e) => this.selectChange1(e)} allowClear>
+                    <label>推荐人 : </label>
+                    <Select style={{ width: 200 }} onChange={(e) => this.selectChange(e)} defaultValue={fromOne} allowClear>
                       {selectDom}
                     </Select>
                   </div>
