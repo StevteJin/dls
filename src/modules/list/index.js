@@ -1,6 +1,7 @@
 //此为列表页
 import React from 'react';
 import { Table, Pagination, Modal, Input, Button, DatePicker, Select, Tooltip, Popover } from 'antd';
+import { ORIGIN } from '../../constants/index'
 //二维码
 import QRCode from 'qrcode.react';
 import axios from 'axios'
@@ -250,22 +251,22 @@ class EditableTable extends React.Component {
     let excelUrl, excelName;
     if (this.state.wherePath == '/moneyWater') {
       //资金流水
-      excelUrl = 'http://106.14.120.212:8199/api.v1/fund/stream/export';
+      excelUrl = `${ORIGIN}` + '/api.v1/fund/stream/export';
       excelName = '资金流水.xls';
     } else if (this.state.wherePath == '/registQuery') {
       //成交信息
-      excelUrl = 'http://106.14.120.212:8199/api.v1/stock/order/history/deal/export';
+      excelUrl = `${ORIGIN}` + '/api.v1/stock/order/history/deal/export';
       excelName = '成交信息.xls';
     } else if (this.state.wherePath == '/registEntrust') {
       //委托信息
-      excelUrl = 'http://106.14.120.212:8199/api.v1/stock/order/history/entrust/export';
+      excelUrl = `${ORIGIN}` + '/api.v1/stock/order/history/entrust/export';
       excelName = '委托信息.xls';
     }
     let method = 'post';
     let beel = false;
     let options = {
       page: this.state.current,
-      size: 16,
+      size: this.state.total || 16,
       filter: this.state.filter,
       option: this.state.option
     };
@@ -600,7 +601,7 @@ class EditableTable extends React.Component {
     this.setState({
       qrUrl1: url,
     }, () => {
-      console.log('地址',this.state.qrUrl1)
+      console.log('地址', this.state.qrUrl1)
       this.myRef.current.style.top = (index / 20) * 90 + '%';
     });
   }
