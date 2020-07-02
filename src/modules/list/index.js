@@ -303,9 +303,14 @@ class EditableTable extends React.Component {
       this.setState({
         selectList: res.data
       }, () => {
-        let selectDom = this.state.selectList.map((item, index) => (
-          <Option value={item.v}>{item.k}</Option>
-        ))
+        let selectDom;
+        if (this.state.selectList && this.state.selectList.length > 0) {
+          selectDom = this.state.selectList.map((item, index) => (
+            <Option value={item.v}>{item.k}</Option>
+          ))
+        } else {
+          selectDom = <Option value=''>无</Option>
+        }
         this.setState({
           selectDom: selectDom
         })
@@ -359,37 +364,47 @@ class EditableTable extends React.Component {
     });
   };
   addNewPerson() {
-    if (this.state.fromOne == this.state.toOne) {
+    if (this.state.selectList && this.state.selectList.length > 0) {
+      if (this.state.fromOne == this.state.toOne) {
+        this.setState({
+          visible: true,
+          msg: '推荐人和客户不能一样'
+        }, () => {
+          console.log('666', this.state.msg)
+        });
+      } else {
+        let url = '/api.v1/user/invite/add';
+        let method = 'post';
+        let beel = false;
+        let options = {
+          from: this.state.fromOne,
+          to: this.state.toOne
+        };
+        httpAxios(url, method, beel, options).then(res => {
+          if (res.code === 0) {
+            this.setState({
+              reallyShow: false
+            })
+            this.searchNow();
+          } else {
+            this.setState({
+              visible: true,
+              msg: res.msg
+            }, () => {
+              console.log('666', this.state.msg)
+            });
+          }
+        })
+      }
+    } else {
       this.setState({
         visible: true,
-        msg: '推荐人和客户不能一样'
+        msg: '没有推荐人和客户，不能提交'
       }, () => {
         console.log('666', this.state.msg)
       });
-    } else {
-      let url = '/api.v1/user/invite/add';
-      let method = 'post';
-      let beel = false;
-      let options = {
-        from: this.state.fromOne,
-        to: this.state.toOne
-      };
-      httpAxios(url, method, beel, options).then(res => {
-        if (res.code === 0) {
-          this.setState({
-            reallyShow: false
-          })
-          this.searchNow();
-        } else {
-          this.setState({
-            visible: true,
-            msg: res.msg
-          }, () => {
-            console.log('666', this.state.msg)
-          });
-        }
-      })
     }
+
   }
   //请求列表数据
   getData(url, method, beel, options) {

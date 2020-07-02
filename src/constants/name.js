@@ -109,5 +109,8 @@ const name =
     { key: 'from_user_name', name: '推荐人名称' },
     { key: 'to_user', name: '客户ID' },
     { key: 'to_user_name', name: '客户名称' },
+    { key: 'total_commission_rebate', name: '交易佣金汇总' },
+    { key: 'total_manager_rebate', name: '管理费汇总' },
+    { key: 'total_profit_rebate', name: '利润分成汇总' }
     ]
 export const NAME = name;
