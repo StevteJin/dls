@@ -261,6 +261,10 @@ class EditableTable extends React.Component {
       //委托信息
       excelUrl = `${ORIGIN}` + '/api.v1/stock/order/history/entrust/export';
       excelName = '委托信息.xls';
+    } else if (this.state.wherePath == '/orderSttleInvite') {
+      //委托信息
+      excelUrl = `${ORIGIN}` + '/api.v1/stock/order/settle/invite/export';
+      excelName = '会员直推统计.xls';
     }
     let method = 'post';
     let beel = false;
@@ -796,7 +800,7 @@ class EditableTable extends React.Component {
             </div> : ''}
           <Button className="searchBtn" type="primary" onClick={() => this.searchNow()}>查询</Button>
           {
-            wherePath == '/moneyWater' || wherePath == '/registQuery' || wherePath == '/registEntrust' ? <Button className="searchBtn" type="primary" onClick={() => this.exportExcel()}>导出</Button> : ''
+            wherePath == '/moneyWater' || wherePath == '/registQuery' || wherePath == '/registEntrust' || wherePath == '/orderSttleInvite' ? <Button className="searchBtn" type="primary" onClick={() => this.exportExcel()}>导出</Button> : ''
           }
           {
             wherePath == '/inviteList' ? <Button className="searchBtn" type="primary" onClick={() => this.addNewNow()}>新增</Button> : ''
