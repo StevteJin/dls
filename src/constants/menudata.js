@@ -85,7 +85,7 @@ const menu = [{
     key: 'inviteList',
     url: '/api.v1/user/invite/list',
     name: '会员直推关系',
-    filter: [{ key: 'from_user', value: '推荐人ID', type: 'LIKE' }, { key: 'from_user_name', value: '推荐人名称', type: 'LIKE' }],
+    filter: [{ key: 'from_user', value: '推荐人ID', type: 'LIKE' }, { key: 'from_user_name', value: '推荐人名称', type: 'LIKE' }, { key: 'to_user', value: '客户ID', type: 'LIKE' }],
     needTime: { key: 'createTime', value: 'RANGE' }
 }];
 export const MENU = menu;
